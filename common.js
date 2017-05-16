@@ -59,6 +59,11 @@ blocklist.common.HOST_REGEX = new RegExp(
  * @private
  */
 blocklist.common.logAction_ = function(request) {
+  // TODO: add option for users to decide
+  // whether they want to send data to google
+  // current early return first
+  return;
+
   var site = request.pattern;
   var eid = request.ei;
   var action = request.type;
