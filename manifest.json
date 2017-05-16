@@ -2,7 +2,7 @@
   "applications": {
     "gecko": {
       "id": "personal_blocklist@wildsky.cc",
-      "strict_min_version": "42.0"
+      "strict_min_version": "45.0"
     }
   },
 
