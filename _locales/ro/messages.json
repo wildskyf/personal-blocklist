@@ -1,0 +1,122 @@
+{
+  "languageShortcode": {
+    "message": "ro",
+    "description": "Language shortcode."
+  },
+  "textDirection": {
+    "message": "ltr",
+    "description": "Direction in which the language is read, either 'ltr' or 'rtl' ('left to right' vs. 'right to left')."
+  },
+  "blockLinkPrefix": {
+    "message": "Blocati ",
+    "description": "Anchor of the blocklist link, host name will be appended (e.g. 'Block wikipedia.org'). If given, should end with space."
+  },
+  "blockLinkSuffix": {
+    "message": "",
+    "description": "Anchor of the blocklist link, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space."
+  },
+  "unblockLinkPrefix": {
+    "message": "Deblocati ",
+    "description": "Anchor of the link to remove domain from blocklist, host name will be appended (e.g. 'Unblock wikipedia.org'). If given, should end with space."
+  },
+  "unblockLinkSuffix": {
+    "message": "",
+    "description": "Anchor of the link to remove domain from blocklist, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space."
+  },
+  "blocklistNotification": {
+    "message": "Unele rezultate au fost excluse datorita block-listei personale din extensia Chrome",
+    "description": "Notification at bottom of page indicating that some results have been removed by the extension."
+  },
+  "showBlockedLink": {
+    "message": "Afisati",
+    "description": "Anchor for the link to make blocked results visible."
+  },
+  "block": {
+    "message": "Blocati",
+    "description": "Block link on the blocklist management pop-up."
+  },
+  "unblock": {
+    "message": "Deblocati",
+    "description": "Unblock link on the blocklist management pop-up."
+  },
+  "edit": {
+    "message": "Editati",
+    "description": "Edit link on the blocklist management pop-up."
+  },
+  "ok": {
+    "message": "Ok",
+    "description": "Confirmation button on the blocklist management pop-up."
+  },
+  "cancel": {
+    "message": "Anulati",
+    "description": "Cancel button on the blocklist management pop-up."
+  },
+  "nosites": {
+    "message": "Nici un domeniu nu a fost inca blocat. Blocati apasand pe linkul <b>'Blocati [domeniu/gazda]'</b> de langa rezultatele de cautare.",
+    "description": "Manager table hint message."
+  },
+  "popupTitle": {
+    "message": "Domeniu/gazda blocate din rezultatele de cautare Google",
+    "description": "Title of the blocklist management pop-up window."
+  },
+  "operation": {
+    "message": "Operatie",
+    "description": "Table header for operations."
+  },
+  "domain": {
+    "message": "Domeniu/gazda",
+    "description": "Table header for domains."
+  },
+  "export": {
+    "message": "Exportati",
+    "description": "Export button/link text."
+  },
+  "import": {
+    "message": "Importati",
+    "description": "Import button/link text."
+  },
+  "importInstructions": {
+    "message": "Importati lista de domenii (unul pe linie)",
+    "description": "Import instructions."
+  },
+  "exportInstructions": {
+    "message": "Copy the list to clipboard or export to your Google account.",
+    "description": "Export instructions."
+  },
+  "validPatternsMessage": {
+    "message": " noi domenii valide adaugate",
+    "description": "Message that x patterns were added to blocklist."
+  },
+  "noPatterns": {
+    "message": "Nu exista o lista de domenii blocate ",
+    "description": "Error message for an empty blocklist."
+  },
+  "blockCurrent": {
+    "message": "Blocati domeniul curent: ",
+    "description": "Link text to block host of current tab url."
+  },
+  "exportToGoogle": {
+    "message": "Exportati la contul Google",
+    "description": "Text of the button that exports the blocklist to a Google account."
+  },
+  "invalidPattern": {
+    "message": "Pattern contains invalid characters.",
+    "description": "Error message for editing a invalid pattern."
+  },
+  "exportDialogMessage": {
+    "message": "Do you want to disable this extension after exporting the list to your Google account?",
+    "description": "Message in the export dialog box."
+  },
+  "exportDialogTitle": {
+    "message": "Disable extension?",
+    "description": "Title in the export dialog box."
+  },
+  "exportDialogYes": {
+    "message": "Yes",
+    "description": "Option message in the export dialog box."
+  },
+  "exportDialogNo": {
+    "message": "No",
+    "description": "Option message in the export dialog box."
+  }
+}

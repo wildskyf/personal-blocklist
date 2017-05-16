@@ -1,0 +1,122 @@
+{
+  "languageShortcode": {
+    "message": "zh_CN",
+    "description": "Language shortcode."
+  },
+  "textDirection": {
+    "message": "ltr",
+    "description": "Direction in which the language is read, either 'ltr' or 'rtl' ('left to right' vs. 'right to left')."
+  },
+  "blockLinkPrefix": {
+    "message": "屏蔽 ",
+    "description": "Anchor of the blocklist link, host name will be appended (e.g. 'Block wikipedia.org'). If given, should end with space."
+  },
+  "blockLinkSuffix": {
+    "message": "",
+    "description": "Anchor of the blocklist link, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space."
+  },
+  "unblockLinkPrefix": {
+    "message": "允许 ",
+    "description": "Anchor of the link to remove domain from blocklist, host name will be appended (e.g. 'Unblock wikipedia.org'). If given, should end with space."
+  },
+  "unblockLinkSuffix": {
+    "message": "",
+    "description": "Anchor of the link to remove domain from blocklist, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space."
+  },
+  "blocklistNotification": {
+    "message": "部分搜索结果被Personal Blocklist Chrome扩展移除",
+    "description": "Notification at bottom of page indicating that some results have been removed by the extension."
+  },
+  "showBlockedLink": {
+    "message": "显示",
+    "description": "Anchor for the link to make blocked results visible."
+  },
+  "block": {
+    "message": "屏蔽",
+    "description": "Block link on the blocklist management pop-up."
+  },
+  "unblock": {
+    "message": "允许",
+    "description": "Unblock link on the blocklist management pop-up."
+  },
+  "edit": {
+    "message": "编辑",
+    "description": "Edit link on the blocklist management pop-up."
+  },
+  "ok": {
+    "message": "确定",
+    "description": "Confirmation button on the blocklist management pop-up."
+  },
+  "cancel": {
+    "message": "取消",
+    "description": "Cancel button on the blocklist management pop-up."
+  },
+  "nosites": {
+    "message": "目前没有网站被屏蔽。如需屏蔽，请点击搜索结果中的<b>'屏蔽 [domain/host]'</b>链接。",
+    "description": "Manager table hint message."
+  },
+  "popupTitle": {
+    "message": "在Google搜索结果中被屏蔽的网站",
+    "description": "Title of the blocklist management pop-up window."
+  },
+  "operation": {
+    "message": "操作",
+    "description": "Table header for operations."
+  },
+  "domain": {
+    "message": "网站",
+    "description": "Table header for domains."
+  },
+  "export": {
+    "message": "导出",
+    "description": "Export button/link text."
+  },
+  "import": {
+    "message": "导入",
+    "description": "Import button/link text."
+  },
+  "importInstructions": {
+    "message": "请输入要屏蔽的网站列表 （每行一个）",
+    "description": "Import instructions."
+  },
+  "exportInstructions": {
+    "message": "復制列表到剪貼板或同步到Google賬號",
+    "description": "Export instructions."
+  },
+  "validPatternsMessage": {
+    "message": " 个网站加入屏蔽列表。",
+    "description": "Message that x patterns were added to blocklist."
+  },
+  "noPatterns": {
+    "message": "没有屏蔽的网站。",
+    "description": "Error message for an empty blocklist."
+  },
+  "blockCurrent": {
+    "message": "屏蔽当前网站: ",
+    "description": "Link text to block host of current tab url."
+  },
+  "exportToGoogle": {
+    "message": "同步到Google賬號",
+    "description": "Text of the button that exports the blocklist to a Google account."
+  },
+  "invalidPattern": {
+    "message": "包含非法字符",
+    "description": "Error message for editing a invalid pattern."
+  },
+  "exportDialogMessage": {
+    "message": "同步到Google賬號後,您是否希望禁用此瀏覽器擴展?",
+    "description": "Message in the export dialog box."
+  },
+  "exportDialogTitle": {
+    "message": "禁用這個擴展",
+    "description": "Title in the export dialog box."
+  },
+  "exportDialogYes": {
+    "message": "是",
+    "description": "Option message in the export dialog box."
+  },
+  "exportDialogNo": {
+    "message": "否",
+    "description": "Option message in the export dialog box."
+  }
+}

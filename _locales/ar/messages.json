@@ -1,0 +1,122 @@
+{
+  "languageShortcode": {
+    "message": "ar",
+    "description": "Language shortcode."
+  },
+  "textDirection": {
+    "message": "rtl",
+    "description": "Direction in which the language is read, either 'ltr' or 'rtl' ('left to right' vs. 'right to left')."
+  },
+  "blockLinkPrefix": {
+    "message": "لا تدرج ",
+    "description": "Anchor of the blocklist link, host name will be appended (e.g. 'Block wikipedia.org'). If given, should end with space."
+  },
+  "blockLinkSuffix": {
+    "message": "",
+    "description": "Anchor of the blocklist link, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space."
+  },
+  "unblockLinkPrefix": {
+    "message": "أدرج ",
+    "description": "Anchor of the link to remove domain from blocklist, host name will be appended (e.g. 'Unblock wikipedia.org'). If given, should end with space."
+  },
+  "unblockLinkSuffix": {
+    "message": "",
+    "description": "Anchor of the link to remove domain from blocklist, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space."
+  },
+  "blocklistNotification": {
+    "message": "تم إزالة بعض نتائج البحث بواسطة إضافة Personal Blocklist",
+    "description": "Notification at bottom of page indicating that some results have been removed by the extension."
+  },
+  "showBlockedLink": {
+    "message": "عرض",
+    "description": "Anchor for the link to make blocked results visible."
+  },
+  "block": {
+    "message": "لا تدرج",
+    "description": "Block link on the blocklist management pop-up."
+  },
+  "unblock": {
+    "message": "أدرج",
+    "description": "Unblock link on the blocklist management pop-up."
+  },
+  "edit": {
+    "message": "تحرير",
+    "description": "Edit link on the blocklist management pop-up."
+  },
+  "ok": {
+    "message": "موافق",
+    "description": "Confirmation button on the blocklist management pop-up."
+  },
+  "cancel": {
+    "message": "إلغاء",
+    "description": "Cancel button on the blocklist management pop-up."
+  },
+  "nosites": {
+    "message": "لم يتم عدم إدراج أي نطاق بعد. يمكنك القيام بذلك عبر الضغط على رابط <b>لا تدرج [نطاق]</b> بقرب نتيجة بحث معينة.",
+    "description": "Manager table hint message."
+  },
+  "popupTitle": {
+    "message": "النطق التي تم عدم ادراجها في نتائج بحث Google",
+    "description": "Title of the blocklist management pop-up window."
+  },
+  "operation": {
+    "message": "عملية ",
+    "description": "Table header for operations."
+  },
+  "domain": {
+    "message": "نطاق",
+    "description": "Table header for domains."
+  },
+  "export": {
+    "message": "تصدير",
+    "description": "Export button/link text."
+  },
+  "import": {
+    "message": "استيراد",
+    "description": "Import button/link text."
+  },
+  "importInstructions": {
+    "message": " أدخل قائمة النطق من أجل اضافتها (واحد في كل سطر ) ",
+    "description": "Import instructions."
+  },
+  "exportInstructions": {
+    "message": "انقل القائمة إلى ال-clipboard أو ارسلها إلى حساب Google الخاص بك.",
+    "description": "Export instructions."
+  },
+  "validPatternsMessage": {
+    "message": " نطق اضيفت للقائمة ",
+    "description": "Message that x patterns were added to blocklist."
+  },
+  "noPatterns": {
+    "message": "لم يتم إيجاد أي نطاق محظور ",
+    "description": "Error message for an empty blocklist."
+  },
+  "blockCurrent": {
+    "message": " عدم إدراج  النطاق الحالي :",
+    "description": "Link text to block host of current tab url."
+  },
+  "exportToGoogle": {
+    "message": "ارسل إلى حساب Google",
+    "description": "Text of the button that exports the blocklist to a Google account."
+  },
+  "invalidPattern": {
+    "message": "هذا النمط يحتوي على رموز غير صالحة.",
+    "description": "Error message for editing a invalid pattern."
+  },
+  "exportDialogMessage": {
+    "message": "هل تريد تعطيل هذه الإضافة بعد تصدير القائمة إلى حساب Google الخاصبك؟",
+    "description": "Message in the export dialog box."
+  },
+  "exportDialogTitle": {
+    "message": "تعطيل هذه الإضافة؟",
+    "description": "Title in the export dialog box."
+  },
+  "exportDialogYes": {
+    "message": "نعم",
+    "description": "Option message in the export dialog box."
+  },
+  "exportDialogNo": {
+    "message": "لا",
+    "description": "Option message in the export dialog box."
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "languageShortcode": {
+    "message": "ru",
+    "description": "Language shortcode."
+  },
+  "textDirection": {
+    "message": "ltr",
+    "description": "Direction in which the language is read, either 'ltr' or 'rtl' ('left to right' vs. 'right to left')."
+  },
+  "blockLinkPrefix": {
+    "message": "Блокировать ",
+    "description": "Anchor of the blocklist link, host name will be appended (e.g. 'Block wikipedia.org'). If given, should end with space."
+  },
+  "blockLinkSuffix": {
+    "message": "",
+    "description": "Anchor of the blocklist link, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space."
+  },
+  "unblockLinkPrefix": {
+    "message": "Разблокировать ",
+    "description": "Anchor of the link to remove domain from blocklist, host name will be appended (e.g. 'Unblock wikipedia.org'). If given, should end with space."
+  },
+  "unblockLinkSuffix": {
+    "message": "",
+    "description": "Anchor of the link to remove domain from blocklist, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space."
+  },
+  "blocklistNotification": {
+    "message": "Некоторые результаты были заблокированы с помощью расширения для Chrome Personal Blocklist",
+    "description": "Notification at bottom of page indicating that some results have been removed by the extension."
+  },
+  "showBlockedLink": {
+    "message": "показать",
+    "description": "Anchor for the link to make blocked results visible."
+  },
+  "block": {
+    "message": "Блокировать",
+    "description": "Block link on the blocklist management pop-up."
+  },
+  "unblock": {
+    "message": "Разблокировать",
+    "description": "Unblock link on the blocklist management pop-up."
+  },
+  "edit": {
+    "message": "Редактировать",
+    "description": "Edit link on the blocklist management pop-up."
+  },
+  "ok": {
+    "message": "ОК",
+    "description": "Confirmation button on the blocklist management pop-up."
+  },
+  "cancel": {
+    "message": "Отмена",
+    "description": "Cancel button on the blocklist management pop-up."
+  },
+  "nosites": {
+    "message": "Ни один домен/хост ещё не был заблокирован. Чтобы заблокировать кликните на ссылку <b>'Блокировать [домен/хост]'</b> рядом с результатом поиска.",
+    "description": "Manager table hint message."
+  },
+  "popupTitle": {
+    "message": "Домены/хосты, заблокированные в результатах поиска Google.",
+    "description": "Title of the blocklist management pop-up window."
+  },
+  "operation": {
+    "message": "Операция",
+    "description": "Table header for operations."
+  },
+  "domain": {
+    "message": "Домен",
+    "description": "Table header for domains."
+  },
+  "export": {
+    "message": "Экспортировать",
+    "description": "Export button/link text."
+  },
+  "import": {
+    "message": "Импортировать",
+    "description": "Import button/link text."
+  },
+  "importInstructions": {
+    "message": "Введите список доменов для добавления (по одному в каждую строку):",
+    "description": "Import instructions."
+  },
+  "exportInstructions": {
+    "message": "Скопируйте список в буфер обмена или экспортируйте в ваш Google аккаунт.",
+    "description": "Export instructions."
+  },
+  "validPatternsMessage": {
+    "message": " новых доменов успешно добавлено",
+    "description": "Message that x patterns were added to blocklist."
+  },
+  "noPatterns": {
+    "message": "Список заблокированных доменов пуст.",
+    "description": "Error message for an empty blocklist."
+  },
+  "blockCurrent": {
+    "message": "Заблокировать данный хост: ",
+    "description": "Link text to block host of current tab url."
+  },
+  "invalidPattern": {
+    "message": "Домен содержит недопустимые символы.",
+    "description": "Error message for editing a invalid pattern."
+  },
+  "exportToGoogle": {
+    "message": "Экспортировать в Google аккаунт",
+    "description": "Text of the button that exports the blocklist to a Google account."
+  },
+  "exportDialogMessage": {
+    "message": "Хотите ли вы отключить этот расширение после экспортирования списка в ваш аккаунт Google?",
+    "description": "Message in the export dialog box."
+  },
+  "exportDialogTitle": {
+    "message": "Отключить расширение?",
+    "description": "Title in the export dialog box."
+  },
+  "exportDialogYes": {
+    "message": "Да",
+    "description": "Option message in the export dialog box."
+  },
+  "exportDialogNo": {
+    "message": "Нет",
+    "description": "Option message in the export dialog box."
+  }
+}

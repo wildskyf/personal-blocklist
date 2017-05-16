@@ -1,0 +1,78 @@
+body {
+  width:600;
+  overflow-x:hidden;
+  font-family:arial;
+  height: 20em;
+}
+
+h3 {
+  font-size: 100%;
+}
+
+.deleted-pattern {
+  background: #d9f2db;
+}
+
+.manager-table {
+  border: #bcf solid 1px;
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+}
+
+.manager-table tr {
+  border: #ddd solid thin;
+  height: 30px;
+}
+
+.manager-table th {
+  border: #ddd solid thin;
+  background: #bcf;
+  padding: 0;
+}
+
+.manager-table td {
+  border: #ddd solid thin;
+  padding: 0;
+}
+
+.manager-edit-table {
+  border: none;
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+}
+
+.manager-edit-table tr {
+  border: none;
+}
+
+.manager-edit-table td {
+  border: none;
+}
+
+.pat-edit-input-text {
+  width: 100%;
+}
+
+.manager-edit-span {
+  width: 60%;
+}
+
+.manager-btn {
+  padding: 2px;
+}
+
+.manager-pattern-hint {
+  position: absolute;
+  left: 1em;
+}
+
+.manager-pattern-list {
+  text-align: center;
+  width: 98%;
+}
+
+.manager-message {
+  display: none;
+}

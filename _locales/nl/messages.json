@@ -1,0 +1,122 @@
+{
+  "languageShortcode": {
+    "message": "nl",
+    "description": "Language shortcode."
+  },
+  "textDirection": {
+    "message": "ltr",
+    "description": "Direction in which the language is read, either 'ltr' or 'rtl' ('left to right' vs. 'right to left')."
+  },
+  "blockLinkPrefix": {
+    "message": "",
+    "description": "Anchor of the blocklist link, host name will be appended (e.g. 'Block wikipedia.org'). If given, should end with space."
+  },
+  "blockLinkSuffix": {
+    "message": " blokkeren",
+    "description": "Anchor of the blocklist link, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space."
+  },
+  "unblockLinkPrefix": {
+    "message": "",
+    "description": "Anchor of the link to remove domain from blocklist, host name will be appended (e.g. 'Unblock wikipedia.org'). If given, should end with space."
+  },
+  "unblockLinkSuffix": {
+    "message": " deblokkeren",
+    "description": "Anchor of the link to remove domain from blocklist, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space."
+  },
+  "blocklistNotification": {
+    "message": "Sommige resultaten zijn geblokkeerd door de Blocklist Chrome extensie",
+    "description": "Notification at bottom of page indicating that some results have been removed by the extension."
+  },
+  "showBlockedLink": {
+    "message": "toon",
+    "description": "Anchor for the link to make blocked results visible."
+  },
+  "block": {
+    "message": "Blokkeren",
+    "description": "Block link on the blocklist management pop-up."
+  },
+  "unblock": {
+    "message": "Deblokkeren",
+    "description": "Unblock link on the blocklist management pop-up."
+  },
+  "edit": {
+    "message": "Wijzigen",
+    "description": "Edit link on the blocklist management pop-up."
+  },
+  "ok": {
+    "message": "Bevestigen",
+    "description": "Confirmation button on the blocklist management pop-up."
+  },
+  "cancel": {
+    "message": "Annuleren",
+    "description": "Cancel button on the blocklist management pop-up."
+  },
+  "nosites": {
+    "message": "Er zijn nog geen domeinen/hosts geblokkeerd. U kunt domeinen/hosts blokkeren door te klikken op de <b>'Blokkeer [domein/host]'</b> link naast een zoekresultaat.",
+    "description": "Manager table hint message."
+  },
+  "popupTitle": {
+    "message": "Geblokkeerde domeinen/hosts van de Google zoekresultaten",
+    "description": "Title of the blocklist management pop-up window."
+  },
+  "operation": {
+    "message": "Operation",
+    "description": "Table header for operations."
+  },
+  "domain": {
+    "message": "Domein",
+    "description": "Table header for domains."
+  },
+  "export": {
+    "message": "Importeren",
+    "description": "Export button/link text."
+  },
+  "import": {
+    "message": "Import",
+    "description": "Import button/link text."
+  },
+  "importInstructions": {
+    "message": "Voeg een lijst van domainen toe (een per regel):",
+    "description": "Import instructions."
+  },
+  "exportInstructions": {
+    "message": "De lijst kopiëren of naar uw Google account exporteren.",
+    "description": "Export instructions."
+  },
+  "validPatternsMessage": {
+    "message": " nieuwe geldige domeinen toegevoegd",
+    "description": "Message that x patterns were added to blocklist."
+  },
+  "noPatterns": {
+    "message": "Er zijn geen geblokkeerde domeinen gevonden.",
+    "description": "Error message for an empty blocklist."
+  },
+  "blockCurrent": {
+    "message": "Blokkeer huidig domein: ",
+    "description": "Link text to block host of current tab url."
+  },
+  "exportToGoogle": {
+    "message": "Naar een Google account exporteren",
+    "description": "Text of the button that exports the blocklist to a Google account."
+  },
+  "invalidPattern": {
+    "message": "Domein bevat ongeldige tekens.",
+    "description": "Error message for editing a invalid pattern."
+  },
+  "exportDialogMessage": {
+    "message": "Wilt u de extensie deactiveren na het exporteren van de lijst naar uw Google account?",
+    "description": "Message in the export dialog box."
+  },
+  "exportDialogTitle": {
+    "message": "Deactiveer deze extensie?",
+    "description": "Title in the export dialog box."
+  },
+  "exportDialogYes": {
+    "message": "Ja",
+    "description": "Option message in the export dialog box."
+  },
+  "exportDialogNo": {
+    "message": "Nee",
+    "description": "Option message in the export dialog box."
+  }
+}

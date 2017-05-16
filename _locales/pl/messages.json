@@ -1,0 +1,122 @@
+{
+  "languageShortcode": {
+    "message": "pl",
+    "description": "Language shortcode."
+  },
+  "textDirection": {
+    "message": "ltr",
+    "description": "Direction in which the language is read, either 'ltr' or 'rtl' ('left to right' vs. 'right to left')."
+  },
+  "blockLinkPrefix": {
+    "message": "Zablokuj ",
+    "description": "Anchor of the blocklist link, host name will be appended (e.g. 'Block wikipedia.org'). If given, should end with space."
+  },
+  "blockLinkSuffix": {
+    "message": "",
+    "description": "Anchor of the blocklist link, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space."
+  },
+  "unblockLinkPrefix": {
+    "message": "Odblokuj ",
+    "description": "Anchor of the link to remove domain from blocklist, host name will be appended (e.g. 'Unblock wikipedia.org'). If given, should end with space."
+  },
+  "unblockLinkSuffix": {
+    "message": "",
+    "description": "Anchor of the link to remove domain from blocklist, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space."
+  },
+  "blocklistNotification": {
+    "message": "Niektóre rezultaty zostały usunięte przez rozszerzenie dla Chrome: Personal Blocklist",
+    "description": "Notification at bottom of page indicating that some results have been removed by the extension."
+  },
+  "showBlockedLink": {
+    "message": "pokaż",
+    "description": "Anchor for the link to make blocked results visible."
+  },
+  "block": {
+    "message": "Zablokuj",
+    "description": "Block link on the blocklist management pop-up."
+  },
+  "unblock": {
+    "message": "Odblokuj",
+    "description": "Unblock link on the blocklist management pop-up."
+  },
+  "edit": {
+    "message": "Edytuj",
+    "description": "Edit link on the blocklist management pop-up."
+  },
+  "ok": {
+    "message": "Zapisz",
+    "description": "Confirmation button on the blocklist management pop-up."
+  },
+  "cancel": {
+    "message": "Anuluj",
+    "description": "Cancel button on the blocklist management pop-up."
+  },
+  "nosites": {
+    "message": "Brak zablokowanych domen/hostów. Użyj linku 'Zablokuj [domenę/host]' przy wyniku wyszukiwania.",
+    "description": "Manager table hint message."
+  },
+  "popupTitle": {
+    "message": "Domena/Host zablokowana w wynikach wyszukiwania Google.",
+    "description": "Title of the blocklist management pop-up window."
+  },
+  "operation": {
+    "message": "Operacje",
+    "description": "Table header for operations."
+  },
+  "domain": {
+    "message": "Domena/Host",
+    "description": "Table header for domains."
+  },
+  "export": {
+    "message": "Eksportuj",
+    "description": "Export button/link text."
+  },
+  "import": {
+    "message": "Importuj",
+    "description": "Import button/link text."
+  },
+  "importInstructions": {
+    "message": "Podaj listę domen/hostów (w osobnych wierszach):",
+    "description": "Import instructions."
+  },
+  "exportInstructions": {
+    "message": "Skopiuj listę do schowka lub exportuj na swoje konto Google.",
+    "description": "Export instructions."
+  },
+  "validPatternsMessage": {
+    "message": " dodanych domen/hostów",
+    "description": "Message that x patterns were added to blocklist."
+  },
+  "noPatterns": {
+    "message": "Brak listy zabkolowanych domen/hostów.",
+    "description": "Error message for an empty blocklist."
+  },
+  "blockCurrent": {
+    "message": "Zablokuj bieżącą domenę: ",
+    "description": "Link text to block host of current tab url."
+  },
+  "exportToGoogle": {
+    "message": "Eksportuj na konto Google",
+    "description": "Text of the button that exports the blocklist to a Google account."
+  },
+  "invalidPattern": {
+    "message": "Adres zawiera niedozwolone znaki.",
+    "description": "Error message for editing a invalid pattern."
+  },
+  "exportDialogMessage": {
+    "message": "Czy chcesz wyłączyć to rozszerzenie po wyeksportowaniu listy do Twojego konta Google?",
+    "description": "Message in the export dialog box."
+  },
+  "exportDialogTitle": {
+    "message": "Wyłączyć to rozszerzenie?",
+    "description": "Title in the export dialog box."
+  },
+  "exportDialogYes": {
+    "message": "Tak",
+    "description": "Option message in the export dialog box."
+  },
+  "exportDialogNo": {
+    "message": "Nie",
+    "description": "Option message in the export dialog box."
+  }
+}

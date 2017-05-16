@@ -1,0 +1,122 @@
+{
+  "languageShortcode": {
+    "message": "he",
+    "description": "Language shortcode."
+  },
+  "textDirection": {
+    "message": "rtl",
+    "description": "Direction in which the language is read, either 'ltr' or 'rtl' ('left to right' vs. 'right to left')."
+  },
+  "blockLinkPrefix": {
+    "message": "חסום את ",
+    "description": "Anchor of the blocklist link, host name will be appended (e.g. 'Block wikipedia.org'). If given, should end with space."
+  },
+  "blockLinkSuffix": {
+    "message": "",
+    "description": "Anchor of the blocklist link, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space."
+  },
+  "unblockLinkPrefix": {
+    "message": "הסר חסימה ",
+    "description": "Anchor of the link to remove domain from blocklist, host name will be appended (e.g. 'Unblock wikipedia.org'). If given, should end with space."
+  },
+  "unblockLinkSuffix": {
+    "message": "",
+    "description": "Anchor of the link to remove domain from blocklist, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space."
+  },
+  "blocklistNotification": {
+    "message": "  תוצאות מסוימות הוסרו על ידי תוסף   Personal Blocklist Chrome",
+    "description": "Notification at bottom of page indicating that some results have been removed by the extension."
+  },
+  "showBlockedLink": {
+    "message": "הצג",
+    "description": "Anchor for the link to make blocked results visible."
+  },
+  "block": {
+    "message": "חסום",
+    "description": "Block link on the blocklist management pop-up."
+  },
+  "unblock": {
+    "message": "הסר חסימה",
+    "description": "Unblock link on the blocklist management pop-up."
+  },
+  "edit": {
+    "message": "ערוך",
+    "description": "Edit link on the blocklist management pop-up."
+  },
+  "ok": {
+    "message": "אישור",
+    "description": "Confirmation button on the blocklist management pop-up."
+  },
+  "cancel": {
+    "message": "ביטול",
+    "description": "Cancel button on the blocklist management pop-up."
+  },
+  "nosites": {
+    "message": "אף דומיין/שרת לא נחסם עדיין. חסום על ידי לחיצה על הקישור <b>'חסום [דומיין/שרת]'</b> ",
+    "description": "Manager table hint message."
+  },
+  "popupTitle": {
+    "message": "דומיין/שרת נחסמו מתוצאות החיפוש של Google",
+    "description": "Title of the blocklist management pop-up window."
+  },
+  "operation": {
+    "message": "דומיין/שרת",
+    "description": "Table header for operations."
+  },
+  "domain": {
+    "message": "תבנית",
+    "description": "Table header for domains."
+  },
+  "export": {
+    "message": "יצוא",
+    "description": "Export button/link text."
+  },
+  "import": {
+    "message": "יבוא",
+    "description": "Import button/link text."
+  },
+  "importInstructions": {
+    "message": "הזן רשימה של דומיינים או שרתים שברצונך להוסיף (אחד לכל שורה):",
+    "description": "Import instructions."
+  },
+  "exportInstructions": {
+    "message": "העתק את הרשימה ל- clipboard או ייצא לחשבון Google שלך",
+    "description": "Export instructions."
+  },
+  "validPatternsMessage": {
+    "message": " דומיינים/שרתים חדשים נוספו לרשימה.",
+    "description": "Message that x patterns were added to blocklist."
+  },
+  "noPatterns": {
+    "message": "לא נמצאו דומיינים/שרתים חסומים.",
+    "description": "Error message for an empty blocklist."
+  },
+  "blockCurrent": {
+    "message": "חסום שרת נוכחי: ",
+    "description": "Link text to block host of current tab url."
+  },
+  "exportToGoogle": {
+    "message": "ייצא לחשבון Google",
+    "description": "Text of the button that exports the blocklist to a Google account."
+  },
+  "invalidPattern": {
+    "message": "התבנית מכילה תווים בלתי חוקיים",
+    "description": "Error message for editing a invalid pattern."
+  },
+  "exportDialogMessage": {
+    "message": "האם ברצונך לבטל את תוסף זה לאחר ייצוא הרשימה לחשבון Google שלך?",
+    "description": "Message in the export dialog box."
+  },
+  "exportDialogTitle": {
+    "message": "האם לבטל את תוסף זה?",
+    "description": "Title in the export dialog box."
+  },
+  "exportDialogYes": {
+    "message": "כן",
+    "description": "Option message in the export dialog box."
+  },
+  "exportDialogNo": {
+    "message": "לא",
+    "description": "Option message in the export dialog box."
+  }
+}

@@ -1,0 +1,36 @@
+<html>
+  <head>
+    <title>Personal block list</title>
+    <link href="css/manager.css" type="text/css" rel="stylesheet" />
+    <link href="css/jquery-ui-1.8.1.custom.css" type="text/css"
+      rel="stylesheet" />
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="jquery-ui.min.js"></script>
+    <script type="text/javascript" src="common.js"></script>
+    <script type="text/javascript" src="tld_list.js"></script>
+    <script type="text/javascript" src="manager.js"></script>
+  </head>
+  <body>
+    <div id="manager">
+      <div id="manager-message"></div>
+      <div style="text-align:center">
+        <h3 id="manager-title"></h3>
+      </div>
+      <div id="manager-instruction"></div>
+      <div id="manager-block-current"></div>
+      <div id="manager-functions">
+        <span id="manager-pattern-hint">
+          <a class="prev-btn" href="javascript:;">&lt;</a>
+          <span id="manager-pattern-hint-msg"></span>
+          <a class="next-btn" href="javascript:;">&gt;</a>
+        </span>
+        <span id="manager-import-export-links"></span>
+      </div>
+      <div id="manager-pattern-list"></div>
+      <div id="manager-import-export-div"></div>
+      <div id="manager-dialog" style="display:none">
+        <div id="manager-dialog-message"></div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,122 @@
+{
+  "languageShortcode": {
+    "message": "de",
+    "description": "Language shortcode."
+  },
+  "textDirection": {
+    "message": "ltr",
+    "description": "Direction in which the language is read, either 'ltr' or 'rtl' ('left to right' vs. 'right to left')."
+  },
+  "blockLinkPrefix": {
+    "message": "Blocca ",
+    "description": "Anchor of the blocklist link, host name will be appended (e.g. 'Block wikipedia.org'). If given, should end with space."
+  },
+  "blockLinkSuffix": {
+    "message": "",
+    "description": "Anchor of the blocklist link, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space."
+  },
+  "unblockLinkPrefix": {
+    "message": "Sblocca ",
+    "description": "Anchor of the link to remove domain from blocklist, host name will be appended (e.g. 'Unblock wikipedia.org'). If given, should end with space."
+  },
+  "unblockLinkSuffix": {
+    "message": "",
+    "description": "Anchor of the link to remove domain from blocklist, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space."
+  },
+  "blocklistNotification": {
+    "message": "Alcuni risultati sono stati rimossi dall'estensione di Chrome Personal Blocklist",
+    "description": "Notification at bottom of page indicating that some results have been removed by the extension."
+  },
+  "showBlockedLink": {
+    "message": "Mostra",
+    "description": "Anchor for the link to make blocked results visible."
+  },
+  "block": {
+    "message": "Blocca",
+    "description": "Block link on the blocklist management pop-up."
+  },
+  "unblock": {
+    "message": "Sblocca",
+    "description": "Unblock link on the blocklist management pop-up."
+  },
+  "edit": {
+    "message": "Modifica",
+    "description": "Edit link on the blocklist management pop-up."
+  },
+  "ok": {
+    "message": "Ok",
+    "description": "Confirmation button on the blocklist management pop-up."
+  },
+  "cancel": {
+    "message": "Cancella",
+    "description": "Cancel button on the blocklist management pop-up."
+  },
+  "nosites": {
+    "message": "Nessun dominio/host è stato già bloccato. Puoi bloccare cliccando sul link <b>'Blocca [dominio/host]'</b> a fianco di un risultato di ricerca.",
+    "description": "Manager table hint message."
+  },
+  "popupTitle": {
+    "message": "Domini/Host bloccati dai risultati di ricerca di Google",
+    "description": "Title of the blocklist management pop-up window."
+  },
+  "operation": {
+    "message": "Operazione",
+    "description": "Table header for operations."
+  },
+  "domain": {
+    "message": "Indirizzo",
+    "description": "Table header for domains."
+  },
+  "export": {
+    "message": "Esporta",
+    "description": "Export button/link text."
+  },
+  "import": {
+    "message": "Importa",
+    "description": "Import button/link text."
+  },
+  "importInstructions": {
+    "message": "Digita la lista di indirizzi da aggiungere (uno per riga):",
+    "description": "Import instructions."
+  },
+  "exportInstructions": {
+    "message": "Copia la lista negli appunti o esportala nel tuo account Google",
+    "description": "Export instructions."
+  },
+  "validPatternsMessage": {
+    "message": " nuovi indirizzi aggiunti.",
+    "description": "Message that x patterns were added to blocklist."
+  },
+  "noPatterns": {
+    "message": "Nessun indirizzo della lista trovato.",
+    "description": "Error message for an empty blocklist."
+  },
+  "blockCurrent": {
+    "message": "Blocca l'host attuale: ",
+    "description": "Link text to block host of current tab url."
+  },
+  "exportToGoogle": {
+    "message": "Esporta nel tuo account Google",
+    "description": "Text of the button that exports the blocklist to a Google account."
+  },
+  "invalidPattern": {
+    "message": "Il pattern contiene del caratteri non validi",
+    "description": "Error message for editing a invalid pattern."
+  },
+  "exportDialogMessage": {
+    "message": "Vuoi disabilitare questa estensione dopo aver esportato la lista nel tuo account Google?",
+    "description": "Message in the export dialog box."
+  },
+  "exportDialogTitle": {
+    "message": "Disabilitare questa estensione?",
+    "description": "Title in the export dialog box."
+  },
+  "exportDialogYes": {
+    "message": "Sì",
+    "description": "Option message in the export dialog box."
+  },
+  "exportDialogNo": {
+    "message": "No",
+    "description": "Option message in the export dialog box."
+  }
+}
