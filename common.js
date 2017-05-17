@@ -64,28 +64,28 @@ blocklist.common.logAction_ = function(request) {
   // current early return first
   return;
 
-  var site = request.pattern;
-  var eid = request.ei;
-  var action = request.type;
-  // Ignore logging when user is under https search result page.
-  if (request.enc) {
-    return;
-  }
-  var args = [
-      'atyp=i',
-      'oi=' + BLOCKER_OI,
-      'ct=' + action,
-      'ei=' + eid,
-      'cad=' + encodeURIComponent(site)
-          ];
-  var url = GEN_204_URL + args.join('&');
-  try {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true /* async */);
-    xhr.send();
-  } catch (e) {
-    // Unable to send XHR.
-  }
+  // var site = request.pattern;
+  // var eid = request.ei;
+  // var action = request.type;
+  // // Ignore logging when user is under https search result page.
+  // if (request.enc) {
+  //   return;
+  // }
+  // var args = [
+  //     'atyp=i',
+  //     'oi=' + BLOCKER_OI,
+  //     'ct=' + action,
+  //     'ei=' + eid,
+  //     'cad=' + encodeURIComponent(site)
+  //         ];
+  // var url = GEN_204_URL + args.join('&');
+  // try {
+  //   var xhr = new XMLHttpRequest();
+  //   xhr.open('GET', url, true /* async */);
+  //   xhr.send();
+  // } catch (e) {
+  //   // Unable to send XHR.
+  // }
 };
 
 /**
