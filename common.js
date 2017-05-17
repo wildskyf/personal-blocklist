@@ -161,8 +161,8 @@ blocklist.common.startBackgroundListeners = function() {
           } else {
             isDisable = false;
           }
-          chrome.management.setEnabled(
-              chrome.i18n.getMessage("@@extension_id"), !isDisable);
+          // chrome.management.setEnabled(
+          //     chrome.i18n.getMessage("@@extension_id"), !isDisable);
         }
       });
 };

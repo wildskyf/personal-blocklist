@@ -692,10 +692,12 @@ blocklist.serp.startBackgroundListeners = function() {
     if (request.type == blocklist.serp.REFRESH_REQUEST) {
       blocklist.serp.refreshBlocklist();
       blocklist.serp.needsRefresh = true;
-    } else if (request.type == blocklist.serp.EXPORTTOGOOGLE_REQUEST) {
-      document.write(request.html);
-      browser.runtime.sendMessage({type: blocklist.common.FINISHEXPORT});
     }
+    // else if (request.type == blocklist.serp.EXPORTTOGOOGLE_REQUEST) {
+    //   console.log(request.html);
+    //   document.write(request.html);
+    //   browser.runtime.sendMessage({type: blocklist.common.FINISHEXPORT});
+    // }
   });
 };
 
