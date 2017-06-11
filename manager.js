@@ -560,7 +560,7 @@ blocklist.manager.constructHintMessage = function(start, num, total) {
   if (end < total) {
     nextBtn.show();
     nextBtn.click(function() {
-      var deleteCount = $('tr.deleted-pattern').size();
+      var deleteCount = $('tr.deleted-pattern').length;
       blocklist.manager.refresh(
           start + blocklist.manager.BL_NUM - deleteCount,
           blocklist.manager.BL_NUM);
