@@ -1,4 +1,6 @@
 body {
+  margin: 0;
+  padding: 0 20px 40px 10px;
   width:600;
   overflow-x:hidden;
   font-family:arial;
@@ -15,7 +17,7 @@ h3 {
 
 .manager-table {
   border: #bcf solid 1px;
-  margin: 0px;
+  margin: 0 0 20px;
   padding: 0px;
   width: 100%;
 }
@@ -27,7 +29,7 @@ h3 {
 
 .manager-table th {
   border: #ddd solid thin;
-  background: #bcf;
+  background: #fafafa;
   padding: 0;
 }
 
