@@ -7,7 +7,7 @@
   },
 
   "name": "Personal Blocklist (not by Google)",
-  "version": "1.1.2",
+  "version": "2.0.0",
   "description": "Blocks domains/hosts from appearing in your Google search results.",
   "manifest_version": 2,
   "background": {
@@ -25,6 +25,7 @@
     "128": "images/icon.png"
   },
   "permissions": [
+    "storage",
     "tabs",
     "management",
     "*://*.google.com/*"

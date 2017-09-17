@@ -89,83 +89,134 @@ blocklist.common.logAction_ = function(request) {
   // }
 };
 
+/****
+ * Storage Managing
+ * migrate data from localStorage to browser.storage
+ */
+
+browser.storage.sync.get().then(data => {
+  if (data.version === undefined) {
+    // still localStorage
+    browser.storage.sync.set({
+      disabled: localStorage.disabled,
+      blocklist: localStorage.blocklist
+    }).then(() => {
+      localStorage.clear();
+      browser.storage.sync.set({
+        version: 1
+      });
+    })
+  }
+});
+
 /**
  * Provides read & write access to local storage for content scripts.
  */
-blocklist.common.startBackgroundListeners = function() {
-  browser.runtime.onMessage.addListener(
-      function(request, sender, sendResponse) {
-        if (request.type == blocklist.common.GETBLOCKLIST) {
-          if (!localStorage.blocklist) {
-            var blocklistPatterns = [];
-            localStorage['blocklist'] = JSON.stringify(blocklistPatterns);
-          } else {
-            var blocklistPatterns = JSON.parse(localStorage['blocklist']);
+blocklist.common.startBackgroundListeners = () => {
+  browser.runtime.onMessage.addListener( (request, sender, sendResponse) => {
+    browser.storage.sync.get().then(data => {
+
+      if (request.type == blocklist.common.GETBLOCKLIST) {
+
+        if (!data.blocklist) {
+          var blocklistPatterns = [];
+          data.blocklist = JSON.stringify(blocklistPatterns);
+        }
+        else {
+          var blocklistPatterns = JSON.parse(data.blocklist);
+        }
+
+        var resultPatterns = [];
+        if (request.num != undefined && request.num > 0) {
+          resultPatterns = blocklistPatterns.slice(request.start, request.start + request.num);
+        }
+        else {
+          resultPatterns = blocklistPatterns;
+        }
+
+        resultPatterns.sort();
+
+        sendResponse({
+          blocklist: resultPatterns,
+          start: request.start,
+          num: request.num,
+          total: blocklistPatterns.length
+        });
+      }
+      else if (request.type == blocklist.common.ADDTOBLOCKLIST) {
+        var bls = JSON.parse(data.blocklist);
+        if (bls.indexOf(request.pattern) == -1) {
+          bls.push(request.pattern);
+          bls.sort();
+          data.blocklist = JSON.stringify(bls);
+          blocklist.common.logAction_(request);
+        }
+        sendResponse({
+          success: 1,
+          pattern: request.pattern
+        });
+      }
+      else if (request.type == blocklist.common.ADDBULKTOBLOCKLIST) {
+        var bls = JSON.parse(data.blocklist);
+        var countBefore = bls.length;
+        var log_patterns = new Array();
+
+        request.patterns.forEach(pattern => {
+
+          if (bls.indexOf(pattern) == -1) {
+            bls.push(pattern);
+            log_patterns.push(patterns);
           }
-          var resultPatterns = [];
-          if (request.num != undefined && request.num > 0) {
-            resultPatterns = blocklistPatterns.slice(
-                request.start, request.start + request.num);
-          } else {
-            resultPatterns = blocklistPatterns;
-          }
-          resultPatterns.sort();
-          sendResponse({blocklist: resultPatterns,
-                        start: request.start,
-                        num: request.num,
-                        total: blocklistPatterns.length});
-        } else if (request.type == blocklist.common.ADDTOBLOCKLIST) {
-          var bls = JSON.parse(localStorage['blocklist']);
-          if (bls.indexOf(request.pattern) == -1) {
-            bls.push(request.pattern);
-            bls.sort();
-            localStorage['blocklist'] = JSON.stringify(bls);
-            blocklist.common.logAction_(request);
-          }
-          sendResponse({success: 1, pattern: request.pattern});
-        } else if (request.type == blocklist.common.ADDBULKTOBLOCKLIST) {
-          var bls = JSON.parse(localStorage['blocklist']);
-          var countBefore = bls.length;
-          var log_patterns = new Array();
-          for (var i = 0; i < request.patterns.length; i++) {
-            if (bls.indexOf(request.patterns[i]) == -1) {
-              bls.push(request.patterns[i]);
-              log_patterns.push(request.patterns[i]);
-            }
-            // Log to gen_204 in batches of 10 patterns.
-            if (log_patterns.length >= blocklist.common.LOG_BATCH_SIZE) {
-              request.pattern = log_patterns.join('|');
-              blocklist.common.logAction_(request);
-              log_patterns = new Array();
-            }
-          }
-          if (log_patterns.length > 0) {
+
+          // Log to gen_204 in batches of 10 patterns.
+          if (log_patterns.length >= blocklist.common.LOG_BATCH_SIZE) {
             request.pattern = log_patterns.join('|');
             blocklist.common.logAction_(request);
+            log_patterns = new Array();
           }
-          bls.sort();
-          localStorage['blocklist'] = JSON.stringify(bls);
-          sendResponse({success: 1, count: bls.length - countBefore});
-        } else if (request.type == blocklist.common.DELETEFROMBLOCKLIST) {
-          var bls = JSON.parse(localStorage['blocklist']);
-          var index = bls.indexOf(request.pattern);
-          if (index != -1) {
-            bls.splice(index, 1);
-            localStorage['blocklist'] = JSON.stringify(bls);
-            blocklist.common.logAction_(request);
-          }
-          sendResponse({success: 1, pattern: request.pattern});
-        }  else if (request.type == blocklist.common.FINISHEXPORT) {
-          var isDisable = true;
-          if (localStorage['disabled'] == 'true') {
-            isDisable = true;
-          } else {
-            isDisable = false;
-          }
-          // chrome.management.setEnabled(
-          //     chrome.i18n.getMessage("@@extension_id"), !isDisable);
+
+        });
+
+        if (log_patterns.length > 0) {
+          request.pattern = log_patterns.join('|');
+          blocklist.common.logAction_(request);
         }
-      });
+        bls.sort();
+        data.blocklist = JSON.stringify(bls);
+        sendResponse({
+          success: 1,
+          count: bls.length - countBefore
+        });
+      }
+      else if (request.type == blocklist.common.DELETEFROMBLOCKLIST) {
+        var bls = JSON.parse(data.blocklist);
+        var index = bls.indexOf(request.pattern);
+        if (index != -1) {
+          bls.splice(index, 1);
+          data.blocklist = JSON.stringify(bls);
+          blocklist.common.logAction_(request);
+        }
+        sendResponse({
+          success: 1,
+          pattern: request.pattern
+        });
+      }
+      else if (request.type == blocklist.common.FINISHEXPORT) {
+        var isDisable = true;
+        if (data.disabled == 'true') {
+          isDisable = true;
+        } else {
+          isDisable = false;
+        }
+        // chrome.management.setEnabled(
+        //     chrome.i18n.getMessage("@@extension_id"), !isDisable);
+      }
+
+      browser.storage.sync.set(data);
+    });
+
+    return true; // async sendBack
+  });
 };
 
 /**
