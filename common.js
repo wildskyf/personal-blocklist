@@ -6,12 +6,6 @@
  */
 
 /**
- * The URL and path to the gen_204 GWS endpoint.
- * @type {string}
- */
-var GEN_204_URL = 'http://www.google.com/gen_204?';
-
-/**
  * The oi ("onebox information") tag that identifies 204s as Site blocker.
  * @type {string}
  */
@@ -63,6 +57,13 @@ blocklist.common.logAction_ = function(request) {
   // whether they want to send data to google
   // current early return first
   return;
+
+  /**
+   * The URL and path to the gen_204 GWS endpoint.
+   * @type {string}
+   */
+
+  // var GEN_204_URL = 'http://www.google.com/gen_204?';
 
   // var site = request.pattern;
   // var eid = request.ei;
