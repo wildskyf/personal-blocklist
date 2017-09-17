@@ -32,11 +32,11 @@
     "description": "Anchor for the link to make blocked results visible."
   },
   "block": {
-    "message": "屏蔽",
+    "message": "封鎖",
     "description": "Block link on the blocklist management pop-up."
   },
   "unblock": {
-    "message": "允许",
+    "message": "允許",
     "description": "Unblock link on the blocklist management pop-up."
   },
   "edit": {
