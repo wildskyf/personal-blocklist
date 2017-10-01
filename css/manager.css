@@ -1,9 +1,9 @@
 body {
   margin: 0;
-  padding: 0 20px 40px 10px;
-  width:600;
-  overflow-x:hidden;
-  font-family:arial;
+  padding: 0 30px 40px 20px;
+  min-width: 600px;
+  overflow-x: hidden;
+  font-family: arial;
   height: 20em;
 }
 

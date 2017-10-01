@@ -3,7 +3,8 @@
 /**
  * @fileoverview Google search result page pattern blocking management
  * functionalities.
- * @author zhonglei@google.com (Ray Zhong)
+ * @origin_author zhonglei@google.com (Ray Zhong)
+ * @author wildsky@moztw.org (Geng-Zhi Fann)
  */
 
 /**
@@ -206,8 +207,7 @@ blocklist.manager.createBlocklistPattern = function(pattern) {
     var curPat = blocklist.manager.assemblePattern_(
         patEditInput.val(), patPreDom.val());
     if (!blocklist.manager.validateHost_(curPat)) {
-      blocklist.manager.showMessage(chrome.i18n.getMessage('invalidPattern'),
-                                    '#FF0000');
+      blocklist.manager.showMessage(chrome.i18n.getMessage('invalidPattern'), '#FF0000');
     } else {
       browser.runtime.sendMessage({
         type: blocklist.common.DELETEFROMBLOCKLIST,
@@ -242,10 +242,7 @@ blocklist.manager.createBlocklistPattern = function(pattern) {
  */
 blocklist.manager.validateHost_ = function(host) {
   var results = blocklist.manager.VALID_HOST_REGEX.exec(host);
-  if (!results || results[0] != host) {
-    return false;
-  }
-  return true;
+  return results && results[0] == host;
 };
 
 /**
@@ -425,8 +422,7 @@ blocklist.manager.handleExportListRequest = function(response) {
     $('#manager-pattern-list').slideUp();
     exportDiv.slideDown();
   } else {
-    blocklist.manager.showMessage(chrome.i18n.getMessage('noPatterns'),
-                                  '#FFAAAA');
+    blocklist.manager.showMessage(chrome.i18n.getMessage('noPatterns'), '#FFAAAA');
     blocklist.manager.hideImportExport();
   }
 };
@@ -450,18 +446,14 @@ blocklist.manager.handleRefreshResponse = function(response) {
 
   if (response.blocklist != undefined && response.blocklist.length > 0) {
     blocklist.manager.addBlockCurrentHostLink(response.blocklist);
-    var table = $('<table class="manager-table"><col width=30%>' +
-                  '<col width=80%></table>');
+    var table = $('<table class="manager-table"><col width=30%><col width=80%></table>');
     var header = $('<tr><th>' + chrome.i18n.getMessage('operation') + '</th>' +
-                   '<th>' + chrome.i18n.getMessage('domain') +
-                   '</th></tr>').appendTo(table);
+                   '<th>' + chrome.i18n.getMessage('domain') + '</th></tr>').appendTo(table);
     for (var i = 0; i < response.blocklist.length; ++i) {
-      var patRow =
-          blocklist.manager.createBlocklistPattern(response.blocklist[i]);
+      var patRow = blocklist.manager.createBlocklistPattern(response.blocklist[i]);
       patRow.appendTo(table);
     }
-    blocklist.manager.constructHintMessage(response.start, response.num,
-                                           response.total);
+    blocklist.manager.constructHintMessage(response.start, response.num, response.total);
     listDiv.append(table);
     $('#manager-import-export-links').html(
         '<a id="manager-import-link" href="#">' +
@@ -471,7 +463,8 @@ blocklist.manager.handleRefreshResponse = function(response) {
     $('#manager-import-export-links').css({'float': importExportPosition});
     $('#manager-export-link').click(blocklist.manager.showExportArea);
     $('#manager-import-link').click(blocklist.manager.showImportArea);
-  } else {
+  }
+  else {
     blocklist.manager.constructHintMessage(0, 0, 0);
     $('#manager-import-export-links').html(
       '<a id="manager-import-link" href="#">' +
@@ -487,15 +480,12 @@ blocklist.manager.handleRefreshResponse = function(response) {
 blocklist.manager.hideCurrentHost = function() {
   var pattern = $('#current-host').text();
   if (blocklist.manager.validateHost_(pattern)) {
-    browser.runtime
-      .sendMessage({
-        type: blocklist.common.ADDTOBLOCKLIST,
-        pattern: pattern
-      })
-      .then(blocklist.manager.handleAddBlocklistResponse);
+    browser.runtime.sendMessage({
+      type: blocklist.common.ADDTOBLOCKLIST,
+      pattern: pattern
+    }).then(blocklist.manager.handleAddBlocklistResponse);
   }
-  blocklist.manager.showMessage(
-      '1' + chrome.i18n.getMessage('validPatternsMessage'), '#CCFF99');
+  blocklist.manager.showMessage('1' + chrome.i18n.getMessage('validPatternsMessage'), '#CCFF99');
   $('#manager-block-current').hide();
   blocklist.manager.refresh(0, blocklist.manager.BL_NUM);
 };
@@ -508,14 +498,13 @@ blocklist.manager.hideCurrentHost = function() {
 blocklist.manager.addBlockCurrentHostLink = function(blockListPatterns) {
   browser.tabs.query({active: true}).then(function(tabs) {
       for (let tab of tabs) {
-        pattern = tab.url.replace(blocklist.common.HOST_REGEX, '$2');
+        var pattern = tab.url.replace(blocklist.common.HOST_REGEX, '$2');
         if (blocklist.manager.validateHost_(pattern) &&
             blockListPatterns.indexOf(pattern) == -1) {
           $('#manager-block-current').html(
               '<a href="#">' + chrome.i18n.getMessage('blockCurrent') +
               '<span id="current-host">' + pattern + '</span></a>');
-          $('#manager-block-current').css({'padding-top': '1em',
-                                           'padding-bottom': '1em'});
+          $('#manager-block-current').css({'padding-top': '1em', 'padding-bottom': '1em'});
           $('#manager-block-current').click(blocklist.manager.hideCurrentHost);
         }
       }
@@ -540,8 +529,7 @@ blocklist.manager.constructHintMessage = function(start, num, total) {
   }
   if (total == 0) {
     blocklist.manager.addBlockCurrentHostLink([]);
-    instructionDiv.css({'padding-top': '1em',
-                        'padding-bottom': '1em'});
+    instructionDiv.css({ 'padding-top': '1em', 'padding-bottom': '1em' });
     preBtn.hide();
     nextBtn.hide();
     instructionDiv.html(chrome.i18n.getMessage('nosites'));

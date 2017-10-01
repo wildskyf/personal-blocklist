@@ -1,20 +1,15 @@
 // Copyright 2011 Google Inc. All Rights Reserved.
 
 /**
- * @fileoverview Common functions for the Personal Blocklist Chrome extension.
- * @author manuelh@google.com (Manuel Holtz)
+ * @fileoverview Common functions for the Personal Blocklist Firefox Add-on.
+ * @origin_author manuelh@google.com (Manuel Holtz)
+ * @author wildsky@moztw.org (Geng-Zhi Fann)
  */
-
-/**
- * The oi ("onebox information") tag that identifies 204s as Site blocker.
- * @type {string}
- */
-var BLOCKER_OI = 'site_blocker';
 
 var blocklist = {};
 
 /**
- * Namespace for common functions of the Blocklist Chrome extension.
+ * Namespace for common functions of the Blocklist Firefox Add-on.
  * @const
  */
 blocklist.common = {};
@@ -26,12 +21,6 @@ blocklist.common.DELETEFROMBLOCKLIST = 'deleteFromBlocklist';
 blocklist.common.FINISHEXPORT = 'finishExport';
 
 /**
- * Batch size for logging bulk added patterns to gen_204.
- * @type {int}
- */
-blocklist.common.LOG_BATCH_SIZE = 10;
-
-/**
  * Regular expression to strip whitespace.
  * @type {RegExp}
  */
@@ -41,71 +30,49 @@ blocklist.common.STRIP_WHITESPACE_REGEX = new RegExp('^\s+|\s+$', 'g');
  * A regular expression to find the host for a url.
  * @type {RegExp}
  */
-blocklist.common.HOST_REGEX = new RegExp(
-    '^https?://(www[.])?([0-9a-zA-Z.-]+).*$');
+blocklist.common.HOST_REGEX = new RegExp('^https?://(www[.])?([0-9a-zA-Z.-]+).*$');
 
-/**
- * Logs an action by sending an XHR to www.google.com/gen_204.
- * The logging action may in the form of:
- * block/release [site].
- * @param {Object} request The detail request containing site and search event
- * id.
- * @private
- */
-blocklist.common.logAction_ = function(request) {
-  // TODO: add option for users to decide
-  // whether they want to send data to google
-  // current early return first
-  return;
 
-  /**
-   * The URL and path to the gen_204 GWS endpoint.
-   * @type {string}
-   */
-
-  // var GEN_204_URL = 'http://www.google.com/gen_204?';
-
-  // var site = request.pattern;
-  // var eid = request.ei;
-  // var action = request.type;
-  // // Ignore logging when user is under https search result page.
-  // if (request.enc) {
-  //   return;
-  // }
-  // var args = [
-  //     'atyp=i',
-  //     'oi=' + BLOCKER_OI,
-  //     'ct=' + action,
-  //     'ei=' + eid,
-  //     'cad=' + encodeURIComponent(site)
-  //         ];
-  // var url = GEN_204_URL + args.join('&');
-  // try {
-  //   var xhr = new XMLHttpRequest();
-  //   xhr.open('GET', url, true /* async */);
-  //   xhr.send();
-  // } catch (e) {
-  //   // Unable to send XHR.
-  // }
-};
 
 /****
  * Storage Managing
- * migrate data from localStorage to browser.storage
  */
 
 browser.storage.sync.get().then(data => {
+
   if (data.version === undefined) {
-    // still localStorage
-    browser.storage.sync.set({
-      disabled: localStorage.disabled,
-      blocklist: localStorage.blocklist
-    }).then(() => {
-      localStorage.clear();
+    // still localStorage or first install
+
+    if (localstorage.disabled == undefined && localstorage.blocklist == undefined) {
       browser.storage.sync.set({
-        version: 1
+        blocklist: "[]",
+        disabled: "false"
+      }).then(() => {
+        localStorage.clear();
+        browser.storage.sync.set({
+          version: 1
+        });
       });
-    })
+    }
+    else {
+      browser.storage.sync.set({
+        blocklist: localStorage.blocklist || "[]",
+        disabled: localStorage.disabled || "false"
+      }).then(() => {
+        localStorage.clear();
+        browser.storage.sync.set({
+          version: 1
+        });
+      });
+    }
+  }
+  else if (data.version === 1) {
+    // migrated from storage
+
+    if (!Array.isArray(data.blocklist) && typeof data.blocklist !== "string")
+      browser.storage.sync.set({ blocklist: "[]" });
+    if (typeof data.disabled !== "boolean" && typeof data.disabled !== "string")
+      browser.storage.sync.set({ disabled: "false" });
   }
 });
 
@@ -121,6 +88,7 @@ blocklist.common.startBackgroundListeners = () => {
         if (!data.blocklist) {
           var blocklistPatterns = [];
           data.blocklist = JSON.stringify(blocklistPatterns);
+          browser.storage.sync.set({ blocklist: data.blocklist });
         }
         else {
           var blocklistPatterns = JSON.parse(data.blocklist);
@@ -145,12 +113,14 @@ blocklist.common.startBackgroundListeners = () => {
       }
       else if (request.type == blocklist.common.ADDTOBLOCKLIST) {
         var bls = JSON.parse(data.blocklist);
-        if (bls.indexOf(request.pattern) == -1) {
+
+        if (!bls.includes(request.pattern)) {
           bls.push(request.pattern);
           bls.sort();
           data.blocklist = JSON.stringify(bls);
-          blocklist.common.logAction_(request);
+          browser.storage.sync.set({ blocklist: data.blocklist });
         }
+
         sendResponse({
           success: 1,
           pattern: request.pattern
@@ -159,30 +129,15 @@ blocklist.common.startBackgroundListeners = () => {
       else if (request.type == blocklist.common.ADDBULKTOBLOCKLIST) {
         var bls = JSON.parse(data.blocklist);
         var countBefore = bls.length;
-        var log_patterns = new Array();
 
         request.patterns.forEach(pattern => {
-
-          if (bls.indexOf(pattern) == -1) {
-            bls.push(pattern);
-            log_patterns.push(patterns);
-          }
-
-          // Log to gen_204 in batches of 10 patterns.
-          if (log_patterns.length >= blocklist.common.LOG_BATCH_SIZE) {
-            request.pattern = log_patterns.join('|');
-            blocklist.common.logAction_(request);
-            log_patterns = new Array();
-          }
-
+          if (!bls.includes(pattern)) bls.push(pattern);
         });
 
-        if (log_patterns.length > 0) {
-          request.pattern = log_patterns.join('|');
-          blocklist.common.logAction_(request);
-        }
         bls.sort();
         data.blocklist = JSON.stringify(bls);
+        browser.storage.sync.set({ blocklist: data.blocklist });
+
         sendResponse({
           success: 1,
           count: bls.length - countBefore
@@ -191,11 +146,13 @@ blocklist.common.startBackgroundListeners = () => {
       else if (request.type == blocklist.common.DELETEFROMBLOCKLIST) {
         var bls = JSON.parse(data.blocklist);
         var index = bls.indexOf(request.pattern);
+
         if (index != -1) {
           bls.splice(index, 1);
           data.blocklist = JSON.stringify(bls);
-          blocklist.common.logAction_(request);
+          browser.storage.sync.set({ blocklist: data.blocklist });
         }
+
         sendResponse({
           success: 1,
           pattern: request.pattern
@@ -205,14 +162,13 @@ blocklist.common.startBackgroundListeners = () => {
         var isDisable = true;
         if (data.disabled == 'true') {
           isDisable = true;
-        } else {
+        }
+        else {
           isDisable = false;
         }
         // chrome.management.setEnabled(
         //     chrome.i18n.getMessage("@@extension_id"), !isDisable);
       }
-
-      browser.storage.sync.set(data);
     });
 
     return true; // async sendBack
@@ -228,8 +184,8 @@ blocklist.common.startBackgroundListeners = () => {
 blocklist.common.addClass = function(classNameString, classToAdd) {
   var classNameArray = classNameString.split(' ');
   var hasClassName = false;
-  for (var i = 0; i < classNameArray.length; i++) {
-    if (classNameArray[i] == classToAdd) {
+  for (var className of classNameArray) {
+    if (className == classToAdd) {
       hasClassName = true;
       break;
     }
@@ -249,8 +205,7 @@ blocklist.common.addClass = function(classNameString, classToAdd) {
 blocklist.common.removeClass = function(classNameString, classToRemove) {
   var reg = new RegExp('( +|^)' + classToRemove + '( +|$)', 'g');
   var newClassNameString = classNameString.replace(reg, ' ');
-  newClassNameString = newClassNameString.replace(
-      blocklist.common.STRIP_WHITESPACE_REGEX, '');
+  newClassNameString = newClassNameString.replace(blocklist.common.STRIP_WHITESPACE_REGEX, '');
   return newClassNameString;
 };
 
@@ -263,15 +218,14 @@ blocklist.common.removeClass = function(classNameString, classToRemove) {
 blocklist.common.hasClass = function(classNameString, classToCheck) {
   var classNameArray = classNameString.split(' ');
   var result = false;
-  for (var i = 0; i < classNameArray.length; i++) {
-    if (classNameArray[i] == classToCheck) {
+  for (var className of classNameArray) {
+    if (className == classToCheck) {
       result = true;
       break;
     }
   }
   return result;
 };
-
 
 document.addEventListener('DOMContentLoaded', function() {
   blocklist.common.startBackgroundListeners();
