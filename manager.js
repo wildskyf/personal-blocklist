@@ -137,16 +137,11 @@ blocklist.manager.createBlocklistPattern = function(pattern) {
   // For example, if the pattern is a.b.c.d. Assuming d is TLD, then a.b is
   // editable.
 
-  var editBtn = $('<a href="javascript:;" class="manager-btn"></a>')
-      .appendTo(operTd);
-  var patEditInput = $('<input class="pat-edit-input-text" type="text" />')
-        .appendTo(patEditTd);
+  var editBtn = $('<a href="javascript:;" class="manager-btn"></a>').appendTo(operTd);
+  var patEditInput = $('<input class="pat-edit-input-text" type="text" />').appendTo(patEditTd);
   var domainPart = $('<span></span>').appendTo(patDomainTd);
-  var patEditInputOK = $('<button class="manager-btn"></button>')
-        .appendTo(patBtnTd);
-  var patEditInputCancel =
-      $('<button class="manager-btn"></button>')
-        .appendTo(patBtnTd);
+  var patEditInputOK = $('<button class="manager-btn"></button>').appendTo(patBtnTd);
+  var patEditInputCancel = $('<button class="manager-btn"></button>').appendTo(patBtnTd);
   editBtn.text(chrome.i18n.getMessage('edit'));
   patEditInputOK.text(chrome.i18n.getMessage('ok'));
   patEditInputCancel.text(chrome.i18n.getMessage('cancel'));

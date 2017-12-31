@@ -38,14 +38,17 @@
         "http://www.google.*/?*",
         "http://www.google.*/search*",
         "http://www.google.*/webhp*",
+
         "https://www.google.*/",
         "https://www.google.*/?*",
         "https://www.google.*/search*",
         "https://www.google.*/webhp*",
+
         "https://encrypted.google.*/",
         "https://encrypted.google.*/?*",
         "https://encrypted.google.*/search*",
         "https://encrypted.google.*/webhp*",
+
         "http://www.google.com/reviews/*"
       ],
 
