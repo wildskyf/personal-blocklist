@@ -135,7 +135,7 @@ blocklist.serp = {
    * Style of blocked search results that are shown on request.
    * @type {string}
    */
-  BLOCKED_VISIBLE_STYLE: 'display:block,background-color:#FFD2D2',
+  BLOCKED_VISIBLE_STYLE: 'display:block; background-color:#FFD2D2;',
 
   /**
    * A regular expression to deal with redirections through Google services,
