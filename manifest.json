@@ -52,7 +52,9 @@
         "http://www.google.com/reviews/*"
       ],
 
-      "js": ["common.js", "content_script.js"]
+      "js": ["common.js", "content_script.js"],
+
+      "run_at": "document_end"
     }
   ]
 }
