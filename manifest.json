@@ -20,8 +20,8 @@
     "default_popup": "manager.html"
   },
   "icons": {
-    "16": "images/icon.png",
-    "48": "images/icon.png",
+    "16": "images/icon-16.jpg",
+    "48": "images/icon-48.jpg",
     "128": "images/icon.png"
   },
   "permissions": [
