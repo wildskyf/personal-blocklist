@@ -454,10 +454,9 @@ blocklist.serp.findBlockPatternForHost_ = function(hostName) {
  */
 blocklist.serp.hideSearchResults = function() {
   var searchResultList = blocklist.serp.getSearchResultNodes_(blocklist.serp.SEARCH_RESULT_CLASS);
-  for (var i = 0; i < searchResultList.length; i++) {
-    var searchResult = searchResultList[i];
-    var matchedPattern = blocklist.serp.findBlockPatternForHost_(
-        blocklist.serp.parseDomainFromSearchResult_(searchResult));
+
+  searchResultList.forEach( searchResult => {
+    var matchedPattern = blocklist.serp.findBlockPatternForHost_(blocklist.serp.parseDomainFromSearchResult_(searchResult));
 
     if (matchedPattern && (
         !searchResult.classList.contains(blocklist.serp.BLOCKED_SEARCH_RESULT_CLASS) &&
@@ -483,7 +482,7 @@ blocklist.serp.hideSearchResults = function() {
         searchResult.setAttribute('style', 'background-color:inherit;');
       }
     }
-  }
+  })
 };
 
 /**
