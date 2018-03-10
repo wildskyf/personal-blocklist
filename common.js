@@ -83,10 +83,9 @@ var blocklist = {
           }
           else if (request.type == blocklist.common.DELETEFROMBLOCKLIST) {
             var bls = JSON.parse(data.blocklist);
-            var index = bls.indexOf(request.pattern);
 
-            if (index != -1) {
-              bls.splice(index, 1);
+            if (bls.includes(request.pattern)) {
+              bls = bls.filter( p => p != request.pattern )
               data.blocklist = JSON.stringify(bls);
               browser.storage.sync.set({ blocklist: data.blocklist });
             }

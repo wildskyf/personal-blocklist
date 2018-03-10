@@ -41,58 +41,12 @@ blocklist.manager.showLongInfo_ = (element, text, length) => {
 };
 
 /**
- * Extract main domain from pattern.
- * @param {string} pattern The pattern where domain is extracted from.
- * @return {string} Main domain.
- * @private
- */
-blocklist.manager.extractDomain_ = pattern => {
-  // Matches the longest suffix against the tld list.
-  var parts = pattern.split('.');
-
-  for (var i = 0; i < parts.length; ++i) {
-    var dm = parts.slice(i).join('.');
-    if (blocklist.TLD_LIST.indexOf(dm) != -1) {
-      return parts.slice(i - 1).join('.');
-    }
-  }
-  // Not found, just return the whole pattern.
-  return pattern;
-};
-
-/**
- * Basic check and correction of the subdomain.
- * @param {string} subdomain The subdomain to be checked and corrected.
- * @return {string} The corrected subdomain.
- * @private
- */
-blocklist.manager.uniformSubDomain_ = function(subdomain) {
-  // Trim left and right spaces and '.',
-  // replace continues '.' with single '.'
-  return subdomain.trim()
-      .replace(/^\.+|\.+$/g, '')
-      .replace(/\.+/g, '.');
-};
-
-/**
- * Assembles pattern with subdomain and domain.
- * @param {string} subdomain The subdomain part.
- * @param {string} domain The domain part.
- * @return {string} The assembled pattern.
- * @private
- */
-blocklist.manager.assemblePattern_ = function(subdomain, domain) {
-  var sd = blocklist.manager.uniformSubDomain_(subdomain);
-  var res = sd ? sd + '.' + domain : domain;
-  return res;
-};
-
-/**
  * Create an editable blocklist url pattern.
  * @param {string} pattern The url pattern to blocklist.
  * @return {Element} A tr element with the pattern and operation.
  */
 blocklist.manager.createBlocklistPattern = pattern => {
+
   // Constructs layout.
   var patRow = $('<tr></tr>');
   var operTd = $('<td style="text-align:center"></td>').appendTo(patRow);
@@ -101,13 +55,13 @@ blocklist.manager.createBlocklistPattern = pattern => {
 
   var patTd = $('<td></td>').appendTo(patRow);
   var patShowDiv = $('<div></div>').appendTo(patTd);
-  var patPreSub = $('<input type="hidden" />').appendTo(patShowDiv);
   var patPreDom = $('<input type="hidden" />').appendTo(patShowDiv);
 
   var patEditTable = $(`<table class="manager-edit-table">
                          <col width=50%><col width=30%><col width=20%>
                        </table>`).appendTo(patTd);
-  var patEditRow = $('<tr></tr>').appendTo(patEditTable);
+  var patEditRow = $(`<tr>
+    </tr>`).appendTo(patEditTable);
   var patEditTd = $('<td></td>').appendTo(patEditRow);
   var patDomainTd = $('<td></td>').appendTo(patEditRow);
   var patBtnTd = $('<td style="text-align:right"></td>').appendTo(patEditRow);
@@ -140,6 +94,7 @@ blocklist.manager.createBlocklistPattern = pattern => {
 
   // Bind events.
   deleteBtn.click(function() {
+
     // Delete pattern
     if ($(this).text() == chrome.i18n.getMessage('unblock')) {
       browser.runtime.sendMessage({
@@ -160,10 +115,9 @@ blocklist.manager.createBlocklistPattern = pattern => {
       editBtn.show();
       patRow.removeClass('deleted-pattern');
       // Add pattern back to local storage.
-      var curPat = blocklist.manager.assemblePattern_(patPreSub.val(), patPreDom.val());
       browser.runtime.sendMessage({
         type: blocklist.common.ADDTOBLOCKLIST,
-        pattern: curPat
+        pattern: pattern
       }).then(blocklist.manager.handleAddBlocklistResponse);
     }
   });
@@ -171,28 +125,32 @@ blocklist.manager.createBlocklistPattern = pattern => {
   // Delete the previous pattern and add current one.
   // Press enter in the input field or click OK.
   patEditInput.keyup( event => event.keyCode == 13 && patEditInputOK.click());
-  patEditInputOK.click( () => {
-    var prePat = blocklist.manager.assemblePattern_(patPreSub.val(), patPreDom.val());
+  patEditInputOK.click( async () => {
     // Check current pattern first, if it is not a valid pattern,
     // return without changing the previous pattern.
-    var curPat = blocklist.manager.assemblePattern_(patEditInput.val(), patPreDom.val());
-    browser.runtime.sendMessage({
+    var old_pattern = pattern,
+        new_pattern = patEditInput.val();
+
+    await browser.runtime.sendMessage({
       type: blocklist.common.DELETEFROMBLOCKLIST,
-      pattern: prePat
+      pattern: old_pattern
     }).then(blocklist.manager.handleDeleteBlocklistResponse);
-    blocklist.manager.showLongInfo_(patShowDiv, curPat, 60);
-    browser.runtime.sendMessage({
+
+    blocklist.manager.showLongInfo_(patShowDiv, new_pattern, 60);
+
+    await browser.runtime.sendMessage({
       type: blocklist.common.ADDTOBLOCKLIST,
-      pattern: curPat
+      pattern: new_pattern
     }).then(blocklist.manager.handleAddBlocklistResponse);
-    patPreSub.val(patEditInput.val());
+
+    patPreDom.val(new_pattern);
     patEditTable.hide();
     patShowDiv.show();
   });
 
   // Resume the change
   patEditInputCancel.click( () => {
-    patEditInput.val(patPreSub.val());
+    patEditInput.val(patPreDom.val());
     patEditTable.hide();
     patShowDiv.show();
   });
@@ -388,6 +346,7 @@ blocklist.manager.handleRefreshResponse = response => {
 
   var listDiv = $('#manager-pattern-list');
   listDiv.empty();
+
   // Floating direction depends on text direction.
   var importExportPosition = 'right';
   if (chrome.i18n.getMessage('textDirection') == 'rtl') {
@@ -395,14 +354,18 @@ blocklist.manager.handleRefreshResponse = response => {
   }
 
   if (response.blocklist != undefined && response.blocklist.length > 0) {
+
     blocklist.manager.addBlockCurrentHostLink(response.blocklist);
+
     var table = $('<table class="manager-table"><col width=30%><col width=80%></table>');
     var header = $('<tr><th>' + chrome.i18n.getMessage('operation') + '</th>' +
                    '<th>' + chrome.i18n.getMessage('domain') + '</th></tr>').appendTo(table);
+
     for (var i = 0; i < response.blocklist.length; ++i) {
       var patRow = blocklist.manager.createBlocklistPattern(response.blocklist[i]);
       patRow.appendTo(table);
     }
+
     blocklist.manager.constructHintMessage(response.start, response.num, response.total);
     listDiv.append(table);
     $('#manager-import-export-links').html(
@@ -513,4 +476,10 @@ blocklist.manager.constructHintMessage = (start, num, total) => {
 
 document.addEventListener('DOMContentLoaded', () => {
   blocklist.manager.refresh(0, blocklist.manager.BL_NUM);
+});
+
+browser.runtime.onMessage.addListener( (request, sender, sendResponse) => {
+  if (request.type = blocklist.common.GETBLOCKLIST ) {
+    blocklist.manager.refresh(0, blocklist.manager.BL_NUM);
+  }
 });
