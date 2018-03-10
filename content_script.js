@@ -435,18 +435,10 @@ blocklist.serp.extractSubDomains_ = function(pattern) {
  * @return {string} A blocklist pattern that matched the host (or empty string).
  * @private
  */
-blocklist.serp.findBlockPatternForHost_ = function(hostName) {
-  var matchedPattern = '';
-  // Match each level of subdomains against the blocklist. For example, if
-  // a.com is blocked, b.a.com should be hidden from search result.
-  var subdomains = blocklist.serp.extractSubDomains_(hostName);
-  for (var j = 0; j < subdomains.length; ++j) {
-    if (blocklist.serp.blocklist.indexOf(subdomains[j]) != -1) {
-      matchedPattern = subdomains[j];
-      break;
-    }
-  }
-  return matchedPattern;
+blocklist.serp.findBlockPatternForHost_ = result_url => {
+  // hide as long as result_url (partly) match one of the list blocklist.serp.blocklist
+
+  return blocklist.serp.blocklist.some( block_pattern => result_url.includes(block_pattern) )
 };
 
 /**
