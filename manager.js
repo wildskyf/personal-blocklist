@@ -119,16 +119,9 @@ blocklist.manager.createBlocklistPattern = function(pattern) {
   var patDomainTd = $('<td></td>').appendTo(patEditRow);
   var patBtnTd = $('<td style="text-align:right"></td>').appendTo(patEditRow);
 
-  // Dive the pattern into subdomain and domain parts.
-
   // Initialize values.
   blocklist.manager.showLongInfo_(patShowDiv, pattern, 60);
   patEditTable.hide();
-
-  var domain = blocklist.manager.extractDomain_(pattern);
-  var subDomain = pattern.substring(0, pattern.indexOf(domain));
-  patPreSub.val(subDomain);
-  patPreDom.val(domain);
 
   deleteBtn.text(chrome.i18n.getMessage('unblock'));
 
@@ -138,7 +131,7 @@ blocklist.manager.createBlocklistPattern = function(pattern) {
   // editable.
 
   var editBtn = $('<a href="javascript:;" class="manager-btn"></a>').appendTo(operTd);
-  var patEditInput = $('<input class="pat-edit-input-text" type="text" />').appendTo(patEditTd);
+  var patEditInput = $('<input class="pat-edit-input-text" type="text" />').val(pattern).appendTo(patEditTd);
   var domainPart = $('<span></span>').appendTo(patDomainTd);
   var patEditInputOK = $('<button class="manager-btn"></button>').appendTo(patBtnTd);
   var patEditInputCancel = $('<button class="manager-btn"></button>').appendTo(patBtnTd);
@@ -146,8 +139,6 @@ blocklist.manager.createBlocklistPattern = function(pattern) {
   patEditInputOK.text(chrome.i18n.getMessage('ok'));
   patEditInputCancel.text(chrome.i18n.getMessage('cancel'));
 
-  blocklist.manager.showLongInfo_(domainPart, '.' + domain, 20);
-  patEditInput.val(subDomain);
   // Change to manual edit mode.
   editBtn.click(function() {
     patShowDiv.hide();
