@@ -27,15 +27,16 @@ blocklist.manager.BL_NUM = 20;
  * @param {Num} length The length limitation for the text.
  * @private
  */
-blocklist.manager.showLongInfo_ = function(element, text, length) {
-  if (text && element) {
-    if (text.length > length) {
-      var subText = text.substring(0, length) + '...';
-      element.text(subText);
-      element.attr('title', text);
-    } else {
-      element.text(text);
-    }
+blocklist.manager.showLongInfo_ = (element, text, length) => {
+  if (!text || !element) return;
+
+  if (text.length > length) {
+    var subText = text.substring(0, length) + '...';
+    element.text(subText);
+    element.attr('title', text);
+  }
+  else {
+    element.text(text);
   }
 };
 
@@ -45,9 +46,10 @@ blocklist.manager.showLongInfo_ = function(element, text, length) {
  * @return {string} Main domain.
  * @private
  */
-blocklist.manager.extractDomain_ = function(pattern) {
+blocklist.manager.extractDomain_ = pattern => {
   // Matches the longest suffix against the tld list.
   var parts = pattern.split('.');
+
   for (var i = 0; i < parts.length; ++i) {
     var dm = parts.slice(i).join('.');
     if (blocklist.TLD_LIST.indexOf(dm) != -1) {
@@ -168,14 +170,8 @@ blocklist.manager.createBlocklistPattern = pattern => {
   // Save manual edit.
   // Delete the previous pattern and add current one.
   // Press enter in the input field or click OK.
-  patEditInput.keyup(function(event) {
-    switch (event.keyCode) {
-      case 13:
-        patEditInputOK.click();
-        break;
-    }
-  });
-  patEditInputOK.click(function() {
+  patEditInput.keyup( event => event.keyCode == 13 && patEditInputOK.click());
+  patEditInputOK.click( () => {
     var prePat = blocklist.manager.assemblePattern_(patPreSub.val(), patPreDom.val());
     // Check current pattern first, if it is not a valid pattern,
     // return without changing the previous pattern.
@@ -195,7 +191,7 @@ blocklist.manager.createBlocklistPattern = pattern => {
   });
 
   // Resume the change
-  patEditInputCancel.click(function() {
+  patEditInputCancel.click( () => {
     patEditInput.val(patPreSub.val());
     patEditTable.hide();
     patShowDiv.show();
@@ -208,28 +204,29 @@ blocklist.manager.createBlocklistPattern = pattern => {
  * Callback that handles the response of the local storage request.
  * @param {Array} response Response from the background page listener.
  */
-blocklist.manager.handleDeleteBlocklistResponse = function(response) {
-  if (response.success) {
-    browser.tabs.query({active: true}).then(function(tabs) {
-      for (let tab of tabs) {
-        browser.tabs.sendMessage(tab.id, {type: 'refresh'});
-      }
-    });
-  }
+blocklist.manager.handleDeleteBlocklistResponse = res => {
+  if (!res.success) return;
+
+  browser.tabs.query({active: true}).then( tabs => {
+    for (let tab of tabs) {
+      browser.tabs.sendMessage(tab.id, {type: 'refresh'});
+    }
+  });
 };
 
 /**
  * Callback that handles the response of the local storage request.
  * @param {Array} response Response from the background page listener.
  */
-blocklist.manager.handleAddBlocklistResponse = function(response) {
-  if (response.success) {
-     browser.tabs.query({active: true}).then(function(tabs) {
-      for (let tab of tabs) {
-        browser.tabs.sendMessage(tab.id, {type: 'refresh'});
-      }
-    });
-  }
+blocklist.manager.handleAddBlocklistResponse = res => {
+  if (!res.success) return;
+
+  browser.tabs.query({active: true}).then( tabs => {
+    for (let tab of tabs) {
+      browser.tabs.sendMessage(tab.id, {type: 'refresh'});
+    }
+  });
+
 };
 
 /**
@@ -237,8 +234,9 @@ blocklist.manager.handleAddBlocklistResponse = function(response) {
  * @param {number} start Offset index for the blocklist.
  * @param {number} num Amount of patterns to fetch from blocklist.
  */
-blocklist.manager.refresh = function(start, num) {
+blocklist.manager.refresh = (start, num) => {
   if (start < 0) start = 0;
+
   browser.runtime.sendMessage({
     'type': blocklist.common.GETBLOCKLIST,
     'start': start,
@@ -249,7 +247,7 @@ blocklist.manager.refresh = function(start, num) {
 /**
  * Imports patterns from the import textarea.
  */
-blocklist.manager.importPatterns = function() {
+blocklist.manager.importPatterns = () => {
   var raw_patterns = $('#manager-import-area').val().split('\n');
   var patterns = blocklist.manager.sanitizePatterns_(raw_patterns);
   if (patterns.length) {
@@ -257,10 +255,10 @@ blocklist.manager.importPatterns = function() {
       type: blocklist.common.ADDBULKTOBLOCKLIST,
       patterns: patterns
     }).then(blocklist.manager.handleImportResponse);
-  } else {
+  }
+  else {
     blocklist.manager.hideImportExport();
-    blocklist.manager.showMessage(
-        '0' + chrome.i18n.getMessage('validPatternsMessage'), '#FFAAAA');
+    blocklist.manager.showMessage('0' + chrome.i18n.getMessage('validPatternsMessage'), '#FFAAAA');
   }
 };
 
@@ -270,25 +268,21 @@ blocklist.manager.importPatterns = function() {
  * @return {Array<string>} Sanitized, validated patterns.
  * @private
  */
-blocklist.manager.sanitizePatterns_ = function(rawPatterns) {
-  var patterns = new Array();
-  for (var i = 0; i < rawPatterns.length; ++i) {
-    candidate = rawPatterns[i];
-    candidate = candidate.replace(/^\s*|\s*$/g, '');  // strip whitespace
-    candidate = candidate.replace(/\s.*$/, '');  // slice after whitespace
-    candidate = candidate.replace(/^https?:\/\//, '');  // slice off protocol
-    candidate = candidate.replace(/^www\./, '');  // slice off www.
-    candidate = candidate.replace(/\/.*$/, '');  // slice off folders
-    candidate = candidate.replace(/:.*$/, '');  // slice off port
-    patterns.push(candidate);
-  }
-  return patterns;
+blocklist.manager.sanitizePatterns_ = rawPatterns => {
+  return rawPatterns.map( candidate =>
+    candidate.replace(/^\s*|\s*$/g, '')    // strip whitespace
+             .replace(/\s.*$/, '')         // slice after whitespace
+             .replace(/^https?:\/\//, '')  // slice off protocol
+             .replace(/^www\./, '')        // slice off www.
+             .replace(/\/.*$/, '')         // slice off folders
+             .replace(/:.*$/, '')         // slice off port
+  )
 };
 
 /**
  * Hide import/export area and show default table.
  */
-blocklist.manager.hideImportExport = function() {
+blocklist.manager.hideImportExport = () => {
   $('#manager-import-export-div').hide();
   blocklist.manager.refresh(0, blocklist.manager.BL_NUM);
 };
@@ -297,10 +291,8 @@ blocklist.manager.hideImportExport = function() {
  * Callback that handles the response for an import request.
  * @param {Array} response Response from the background page listener.
  */
-blocklist.manager.handleImportResponse = function(response) {
-  blocklist.manager.showMessage(
-      response.count + chrome.i18n.getMessage('validPatternsMessage'),
-      '#CCFF99');
+blocklist.manager.handleImportResponse = response => {
+  blocklist.manager.showMessage(response.count + chrome.i18n.getMessage('validPatternsMessage'), '#CCFF99');
   blocklist.manager.hideImportExport();
 };
 
@@ -309,7 +301,7 @@ blocklist.manager.handleImportResponse = function(response) {
  * @param {string} message Message to show.
  * @param {string} colorDef Html color code for message background.
  */
-blocklist.manager.showMessage = function(message, colorDef) {
+blocklist.manager.showMessage = (message, colorDef) => {
   $('#manager-message').text(message);
   $('#manager-message').css({'background-color': colorDef,
                              'font-weight': 'bold',
@@ -324,7 +316,7 @@ blocklist.manager.showMessage = function(message, colorDef) {
 /**
  * Shows textarea for blocklist pattern import.
  */
-blocklist.manager.showImportArea = function() {
+blocklist.manager.showImportArea = () => {
   var importDiv = $('#manager-import-export-div');
   importDiv.css('display', 'none');
   importDiv.html('<p id="manager-import-instruction">' +
@@ -347,48 +339,49 @@ blocklist.manager.showImportArea = function() {
 /**
  * Shows textarea with plain text blocklist patterns for export.
  */
-blocklist.manager.showExportArea = function() {
-  browser.runtime
-    .sendMessage({'type': blocklist.common.GETBLOCKLIST})
-    .then(blocklist.manager.handleExportListRequest);
+blocklist.manager.showExportArea = () => {
+  browser.runtime.sendMessage({
+    'type': blocklist.common.GETBLOCKLIST
+  }).then(blocklist.manager.handleExportListRequest);
 };
 
 /**
  * Callback that handles a request to show plain text blocklist for export.
  * @param {Array} response Response from the background page listener.
  */
-blocklist.manager.handleExportListRequest = function(response) {
-  if (response.blocklist != undefined && response.blocklist.length > 0) {
-    var blocklistPatternString = '';
-    for (var i = 0; i < response.blocklist.length; ++i) {
-      blocklistPatternString += response.blocklist[i] + '\n';
-    }
-    var exportDiv = $('#manager-import-export-div');
-    exportDiv.css('display', 'none');
-    exportDiv.html('<p id="manager-export-instruction">' +
-                   chrome.i18n.getMessage('exportInstructions') + '</p>' +
-                   '<textarea readonly="true" id="manager-export-area">' +
-                   blocklistPatternString + '</textarea><br />' +
-                   '<button id="export-done-btn"></button>');
-    $('#export-done-btn').text(chrome.i18n.getMessage('ok'));
-    $('#export-done-btn').click(blocklist.manager.hideImportExport);
-    $('#manager-export-area').attr('rows', '10');
-    $('#manager-export-area').attr('cols', '50');
-    $('#manager-block-current').hide();
-    $('#manager-functions').hide();
-    $('#manager-pattern-list').slideUp();
-    exportDiv.slideDown();
-  } else {
+blocklist.manager.handleExportListRequest = response => {
+
+  if ( !(response.blocklist && response.blocklist.length)) {
     blocklist.manager.showMessage(chrome.i18n.getMessage('noPatterns'), '#FFAAAA');
     blocklist.manager.hideImportExport();
+    return;
   }
+
+  var blocklistPatternString = response.blocklist.reduce( (sum, current) => sum + current + '\n', '')
+
+  var exportDiv = $('#manager-import-export-div')
+    .css('display', 'none')
+    .html(`
+      <p id="manager-export-instruction">${chrome.i18n.getMessage('exportInstructions')}</p>
+       <textarea readonly="true" id="manager-export-area">${blocklistPatternString}</textarea>
+       <br />
+       <button id="export-done-btn"></button>
+    `);
+  $('#export-done-btn').text(chrome.i18n.getMessage('ok'));
+  $('#export-done-btn').click(blocklist.manager.hideImportExport);
+  $('#manager-export-area').attr('rows', '10');
+  $('#manager-export-area').attr('cols', '50');
+  $('#manager-block-current').hide();
+  $('#manager-functions').hide();
+  $('#manager-pattern-list').slideUp();
+  exportDiv.slideDown();
 };
 
 /**
  * Callback that handles the refresh request.
  * @param {Array} response Response from the background page listener.
  */
-blocklist.manager.handleRefreshResponse = function(response) {
+blocklist.manager.handleRefreshResponse = response => {
   $('#manager-functions').fadeIn('fast');
   $('#manager-pattern-list').fadeIn('fast');
   $('#manager-title').text(chrome.i18n.getMessage('popupTitle'));
@@ -434,12 +427,14 @@ blocklist.manager.handleRefreshResponse = function(response) {
 /**
  * Adds host of active tab to blocklist.
  */
-blocklist.manager.hideCurrentHost = function() {
+blocklist.manager.hideCurrentHost = () => {
   var pattern = $('#current-host').text();
+
   browser.runtime.sendMessage({
     type: blocklist.common.ADDTOBLOCKLIST,
     pattern: pattern
   }).then(blocklist.manager.handleAddBlocklistResponse);
+
   blocklist.manager.showMessage('1' + chrome.i18n.getMessage('validPatternsMessage'), '#CCFF99');
   $('#manager-block-current').hide();
   blocklist.manager.refresh(0, blocklist.manager.BL_NUM);
@@ -450,8 +445,8 @@ blocklist.manager.hideCurrentHost = function() {
  * Creates a link to block host of url in currently active tab.
  * @param {Array.<string>} blockListPatterns Patterns from the blocklist.
  */
-blocklist.manager.addBlockCurrentHostLink = function(blockListPatterns) {
-  browser.tabs.query({active: true}).then(function(tabs) {
+blocklist.manager.addBlockCurrentHostLink = blockListPatterns => {
+  browser.tabs.query({active: true}).then( tabs => {
       for (let tab of tabs) {
         var pattern = tab.url.replace(blocklist.common.HOST_REGEX, '$2');
         if (!blockListPatterns.includes(pattern)) {
@@ -469,7 +464,7 @@ blocklist.manager.addBlockCurrentHostLink = function(blockListPatterns) {
  * @param {number} num The number of list show.
  * @param {number} total The total size of blocklist.
  */
-blocklist.manager.constructHintMessage = function(start, num, total) {
+blocklist.manager.constructHintMessage = (start, num, total) => {
   $('#manager').attr('dir', chrome.i18n.getMessage('textDirection'));
   var hintDiv = $('#manager-pattern-hint');
   var instructionDiv = $('#manager-instruction');
@@ -488,33 +483,34 @@ blocklist.manager.constructHintMessage = function(start, num, total) {
     return;
   }
   instructionDiv.hide();
+
   if (start > 0) {
     preBtn.show();
-    preBtn.click(function() {
-      blocklist.manager.refresh(
-          start - blocklist.manager.BL_NUM, blocklist.manager.BL_NUM);
+    preBtn.click( () => {
+      blocklist.manager.refresh(start - blocklist.manager.BL_NUM, blocklist.manager.BL_NUM);
     });
-  } else {
+  }
+  else {
     preBtn.hide();
   }
+
   if (end < total) {
     nextBtn.show();
-    nextBtn.click(function() {
+    nextBtn.click( () => {
       var deleteCount = $('tr.deleted-pattern').length;
-      blocklist.manager.refresh(
-          start + blocklist.manager.BL_NUM - deleteCount,
-          blocklist.manager.BL_NUM);
+      blocklist.manager.refresh(start + blocklist.manager.BL_NUM - deleteCount, blocklist.manager.BL_NUM);
     });
-  } else {
+  }
+  else {
     nextBtn.hide();
   }
+
   var str = '';
   str += (start + 1) + ' - ' + end + ' of ' + total;
   hintDiv.find('#manager-pattern-hint-msg').text(str);
   hintDiv.attr('dir', 'ltr');  // No translation, always left-to-right.
 };
 
-
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
   blocklist.manager.refresh(0, blocklist.manager.BL_NUM);
 });
