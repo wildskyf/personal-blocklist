@@ -143,14 +143,16 @@ blocklist.manager.createBlocklistPattern = pattern => {
       pattern: new_pattern
     }).then(blocklist.manager.handleAddBlocklistResponse);
 
-    patPreDom.val(new_pattern);
+    pattern = new_pattern
+    patPreDom.val(pattern);
     patEditTable.hide();
     patShowDiv.show();
   });
 
   // Resume the change
   patEditInputCancel.click( () => {
-    patEditInput.val(patPreDom.val());
+    pattern = patPreDom.val();
+    patEditInput.val(pattern);
     patEditTable.hide();
     patShowDiv.show();
   });
