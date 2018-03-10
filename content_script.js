@@ -453,32 +453,33 @@ blocklist.serp.findBlockPatternForHost_ = function(hostName) {
  * Removes all search results that match the blocklist.
  */
 blocklist.serp.hideSearchResults = function() {
-  var searchResultList = blocklist.serp.getSearchResultNodes_(blocklist.serp.SEARCH_RESULT_CLASS);
+  const { serp } = blocklist;
+  var searchResultList = serp.getSearchResultNodes_(serp.SEARCH_RESULT_CLASS);
 
   searchResultList.forEach( searchResult => {
-    var matchedPattern = blocklist.serp.findBlockPatternForHost_(blocklist.serp.parseDomainFromSearchResult_(searchResult));
+    var matchedPattern = serp.findBlockPatternForHost_(serp.parseDomainFromSearchResult_(searchResult));
 
     if (matchedPattern && (
-        !searchResult.classList.contains(blocklist.serp.BLOCKED_SEARCH_RESULT_CLASS) &&
-        !searchResult.classList.contains(blocklist.serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS)
+        !searchResult.classList.contains(serp.BLOCKED_SEARCH_RESULT_CLASS) &&
+        !searchResult.classList.contains(serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS)
     )) {
-      if (searchResult.parentNode.classList.contains(blocklist.serp.SHOWED_GWS_BLOCK_LINK_CLASS)) {
-        searchResult.setAttribute('style', blocklist.serp.BLOCKED_VISIBLE_STYLE);
-        searchResult.classList.remove(blocklist.serp.BLOCKED_SEARCH_RESULT_CLASS);
-        searchResult.classList.add(blocklist.serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS);
+      if (searchResult.parentNode.classList.contains(serp.SHOWED_GWS_BLOCK_LINK_CLASS)) {
+        searchResult.setAttribute('style', serp.BLOCKED_VISIBLE_STYLE);
+        searchResult.classList.remove(serp.BLOCKED_SEARCH_RESULT_CLASS);
+        searchResult.classList.add(serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS);
       }
       else {
-        blocklist.serp.hideSearchResult(searchResult);
+        serp.hideSearchResult(searchResult);
       }
     }
 
     if (!matchedPattern) {
       if (
-        searchResult.classList.contains(blocklist.serp.BLOCKED_SEARCH_RESULT_CLASS) ||
-        searchResult.classList.contains(blocklist.serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS)
+        searchResult.classList.contains(serp.BLOCKED_SEARCH_RESULT_CLASS) ||
+        searchResult.classList.contains(serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS)
       ) {
-        searchResult.classList.remove(blocklist.serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS);
-        searchResult.classList.remove(blocklist.serp.BLOCKED_SEARCH_RESULT_CLASS);
+        searchResult.classList.remove(serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS);
+        searchResult.classList.remove(serp.BLOCKED_SEARCH_RESULT_CLASS);
         searchResult.setAttribute('style', 'background-color:inherit;');
       }
     }
