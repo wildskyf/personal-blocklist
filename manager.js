@@ -23,8 +23,7 @@ blocklist.manager.BL_NUM = 20;
  * Regular expression to validate host/domain pattern.
  * @type {RegExp}
  */
-blocklist.manager.VALID_HOST_REGEX =
-    new RegExp('^([^.:;/*!?\'\" ()#$@<>]+[.])+[^.:;/*!?\'\" ()#$@<>]{2,4}$');
+blocklist.manager.VALID_HOST_REGEX = new RegExp('^([^.:;/*!?\'\" ()#$@<>]+[.])+[^.:;/*!?\'\" ()#$@<>]{2,4}$');
 
 /**
  * Trim text which is too long to fit in the element. Use title to show complete
@@ -97,23 +96,21 @@ blocklist.manager.assemblePattern_ = function(subdomain, domain) {
  * @param {string} pattern The url pattern to blocklist.
  * @return {Element} A tr element with the pattern and operation.
  */
-blocklist.manager.createBlocklistPattern = function(pattern) {
+blocklist.manager.createBlocklistPattern = pattern => {
   // Constructs layout.
   var patRow = $('<tr></tr>');
-  var operTd = $('<td style="text-align:center"></td>')
-                .appendTo(patRow);
+  var operTd = $('<td style="text-align:center"></td>').appendTo(patRow);
 
-  var deleteBtn = $('<a href="javascript:;" class="manager-btn"></a>')
-      .appendTo(operTd);
+  var deleteBtn = $('<a href="javascript:void(0);" class="manager-btn"></a>').appendTo(operTd);
 
   var patTd = $('<td></td>').appendTo(patRow);
   var patShowDiv = $('<div></div>').appendTo(patTd);
   var patPreSub = $('<input type="hidden" />').appendTo(patShowDiv);
   var patPreDom = $('<input type="hidden" />').appendTo(patShowDiv);
 
-  var patEditTable = $('<table class="manager-edit-table">' +
-                       '<col width=50%><col width=30%><col width=20%>' +
-                       '</table>').appendTo(patTd);
+  var patEditTable = $(`<table class="manager-edit-table">
+                         <col width=50%><col width=30%><col width=20%>
+                       </table>`).appendTo(patTd);
   var patEditRow = $('<tr></tr>').appendTo(patEditTable);
   var patEditTd = $('<td></td>').appendTo(patEditRow);
   var patDomainTd = $('<td></td>').appendTo(patEditRow);
@@ -125,12 +122,11 @@ blocklist.manager.createBlocklistPattern = function(pattern) {
 
   deleteBtn.text(chrome.i18n.getMessage('unblock'));
 
-
   // Manual edit patterns, only subdomains` part is available for editing.
   // For example, if the pattern is a.b.c.d. Assuming d is TLD, then a.b is
   // editable.
 
-  var editBtn = $('<a href="javascript:;" class="manager-btn"></a>').appendTo(operTd);
+  var editBtn = $('<a href="javascript:void(0);" class="manager-btn"></a>').appendTo(operTd);
   var patEditInput = $('<input class="pat-edit-input-text" type="text" />').val(pattern).appendTo(patEditTd);
   var domainPart = $('<span></span>').appendTo(patDomainTd);
   var patEditInputOK = $('<button class="manager-btn"></button>').appendTo(patBtnTd);
@@ -161,14 +157,14 @@ blocklist.manager.createBlocklistPattern = function(pattern) {
       patEditTable.hide();
       patRow.addClass('deleted-pattern');
       $(this).text(chrome.i18n.getMessage('block'));
-    } else {
+    }
+    else {
       // Restore pattern
       $(this).text(chrome.i18n.getMessage('unblock'));
       editBtn.show();
       patRow.removeClass('deleted-pattern');
       // Add pattern back to local storage.
-      var curPat = blocklist.manager.assemblePattern_(patPreSub.val(),
-                                                      patPreDom.val());
+      var curPat = blocklist.manager.assemblePattern_(patPreSub.val(), patPreDom.val());
       browser.runtime.sendMessage({
         type: blocklist.common.ADDTOBLOCKLIST,
         pattern: curPat
@@ -186,15 +182,14 @@ blocklist.manager.createBlocklistPattern = function(pattern) {
     }
   });
   patEditInputOK.click(function() {
-    var prePat = blocklist.manager.
-      assemblePattern_(patPreSub.val(), patPreDom.val());
+    var prePat = blocklist.manager.assemblePattern_(patPreSub.val(), patPreDom.val());
     // Check current pattern first, if it is not a valid pattern,
     // return without changing the previous pattern.
-    var curPat = blocklist.manager.assemblePattern_(
-        patEditInput.val(), patPreDom.val());
+    var curPat = blocklist.manager.assemblePattern_(patEditInput.val(), patPreDom.val());
     if (!blocklist.manager.validateHost_(curPat)) {
       blocklist.manager.showMessage(chrome.i18n.getMessage('invalidPattern'), '#FF0000');
-    } else {
+    }
+    else {
       browser.runtime.sendMessage({
         type: blocklist.common.DELETEFROMBLOCKLIST,
         pattern: prePat
