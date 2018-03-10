@@ -20,12 +20,6 @@ blocklist.manager = {};
 blocklist.manager.BL_NUM = 20;
 
 /**
- * Regular expression to validate host/domain pattern.
- * @type {RegExp}
- */
-blocklist.manager.VALID_HOST_REGEX = new RegExp('^([^.:;/*!?\'\" ()#$@<>]+[.])+[^.:;/*!?\'\" ()#$@<>]{2,4}$');
-
-/**
  * Trim text which is too long to fit in the element. Use title to show complete
  * text.
  * @param {Object} element The element where the text shows.
@@ -186,21 +180,16 @@ blocklist.manager.createBlocklistPattern = pattern => {
     // Check current pattern first, if it is not a valid pattern,
     // return without changing the previous pattern.
     var curPat = blocklist.manager.assemblePattern_(patEditInput.val(), patPreDom.val());
-    if (!blocklist.manager.validateHost_(curPat)) {
-      blocklist.manager.showMessage(chrome.i18n.getMessage('invalidPattern'), '#FF0000');
-    }
-    else {
-      browser.runtime.sendMessage({
-        type: blocklist.common.DELETEFROMBLOCKLIST,
-        pattern: prePat
-      }).then(blocklist.manager.handleDeleteBlocklistResponse);
-      blocklist.manager.showLongInfo_(patShowDiv, curPat, 60);
-      browser.runtime.sendMessage({
-        type: blocklist.common.ADDTOBLOCKLIST,
-        pattern: curPat
-      }).then(blocklist.manager.handleAddBlocklistResponse);
-      patPreSub.val(patEditInput.val());
-    }
+    browser.runtime.sendMessage({
+      type: blocklist.common.DELETEFROMBLOCKLIST,
+      pattern: prePat
+    }).then(blocklist.manager.handleDeleteBlocklistResponse);
+    blocklist.manager.showLongInfo_(patShowDiv, curPat, 60);
+    browser.runtime.sendMessage({
+      type: blocklist.common.ADDTOBLOCKLIST,
+      pattern: curPat
+    }).then(blocklist.manager.handleAddBlocklistResponse);
+    patPreSub.val(patEditInput.val());
     patEditTable.hide();
     patShowDiv.show();
   });
@@ -213,17 +202,6 @@ blocklist.manager.createBlocklistPattern = pattern => {
   });
 
   return patRow;
-};
-
-/**
- * Validates a host.
- * @param {string} host The host to be validated.
- * @return {boolean} true if the host is valid.
- * @private
- */
-blocklist.manager.validateHost_ = function(host) {
-  var results = blocklist.manager.VALID_HOST_REGEX.exec(host);
-  return results && results[0] == host;
 };
 
 /**
@@ -302,9 +280,7 @@ blocklist.manager.sanitizePatterns_ = function(rawPatterns) {
     candidate = candidate.replace(/^www\./, '');  // slice off www.
     candidate = candidate.replace(/\/.*$/, '');  // slice off folders
     candidate = candidate.replace(/:.*$/, '');  // slice off port
-    if (blocklist.manager.validateHost_(candidate)) {
-      patterns.push(candidate);
-    }
+    patterns.push(candidate);
   }
   return patterns;
 };
@@ -460,12 +436,10 @@ blocklist.manager.handleRefreshResponse = function(response) {
  */
 blocklist.manager.hideCurrentHost = function() {
   var pattern = $('#current-host').text();
-  if (blocklist.manager.validateHost_(pattern)) {
-    browser.runtime.sendMessage({
-      type: blocklist.common.ADDTOBLOCKLIST,
-      pattern: pattern
-    }).then(blocklist.manager.handleAddBlocklistResponse);
-  }
+  browser.runtime.sendMessage({
+    type: blocklist.common.ADDTOBLOCKLIST,
+    pattern: pattern
+  }).then(blocklist.manager.handleAddBlocklistResponse);
   blocklist.manager.showMessage('1' + chrome.i18n.getMessage('validPatternsMessage'), '#CCFF99');
   $('#manager-block-current').hide();
   blocklist.manager.refresh(0, blocklist.manager.BL_NUM);
@@ -480,11 +454,8 @@ blocklist.manager.addBlockCurrentHostLink = function(blockListPatterns) {
   browser.tabs.query({active: true}).then(function(tabs) {
       for (let tab of tabs) {
         var pattern = tab.url.replace(blocklist.common.HOST_REGEX, '$2');
-        if (blocklist.manager.validateHost_(pattern) &&
-            blockListPatterns.indexOf(pattern) == -1) {
-          $('#manager-block-current').html(
-              '<a href="#">' + chrome.i18n.getMessage('blockCurrent') +
-              '<span id="current-host">' + pattern + '</span></a>');
+        if (!blockListPatterns.includes(pattern)) {
+          $('#manager-block-current').html(`<a href="#">${chrome.i18n.getMessage('blockCurrent')}<span id="current-host">${pattern}</span></a>`);
           $('#manager-block-current').css({'padding-top': '1em', 'padding-bottom': '1em'});
           $('#manager-block-current').click(blocklist.manager.hideCurrentHost);
         }
