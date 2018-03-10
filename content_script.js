@@ -62,7 +62,7 @@ blocklist.serp = {
    * Class that contains the cite tag on Google SERP.
    * @type {string}
    */
-  SEARCH_RESULT_CITE_DIV_CLASS: 'kv',
+  SEARCH_RESULT_CITE_DIV_CLASS: 'f', // note: the cite tag's parent
 
   /**
    * Class of the short (snippet-less) search results links on Google SERP.
