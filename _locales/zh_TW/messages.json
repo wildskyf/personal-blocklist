@@ -24,7 +24,7 @@
     "description": "Anchor of the link to remove domain from blocklist, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space."
   },
   "blocklistNotification": {
-    "message": "部分搜尋結果已被 Personal Blocklist add-on 移除",
+    "message": "部分搜尋結果已被 Google Personal Blocklist add-on 移除",
     "description": "Notification at bottom of page indicating that some results have been removed by the extension."
   },
   "showBlockedLink": {
