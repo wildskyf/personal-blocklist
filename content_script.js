@@ -333,7 +333,7 @@ blocklist.serp.removeBlocklistPattern_ = function(pattern) {
  * @return {string} A domain if found; or an empty string.
  * @private
  */
-blocklist.serp.parseDomainFromSearchResult_ = function(searchResult) {
+blocklist.serp.parseUrlFromSearchResult_ = function(searchResult) {
   var searchResultAnchor = searchResult.querySelector('h3 > a');
   if (searchResultAnchor === null) return '';
 
@@ -343,8 +343,12 @@ blocklist.serp.parseDomainFromSearchResult_ = function(searchResult) {
   // don't block translate.google.com instead of the target host.
   url = url.replace(blocklist.serp.REDIRECT_REGEX, '$7');
   // Identify domain by stripping protocol and path.
-  return url.replace(blocklist.common.HOST_REGEX, '$2');
+  return decodeURI(url);
 };
+
+blocklist.serp.parseDomainFromSearchResult_ = (search_result) => {
+  return blocklist.serp.parseUrlFromSearchResult_(search_result).replace(blocklist.common.HOST_REGEX, '$2');
+}
 
 /**
  * Determines if and in which way a result result needs to be modified.
@@ -449,7 +453,7 @@ blocklist.serp.hideSearchResults = function() {
   var searchResultList = serp.getSearchResultNodes_(serp.SEARCH_RESULT_CLASS);
 
   searchResultList.forEach( searchResult => {
-    var matchedPattern = serp.findBlockPatternForHost_(serp.parseDomainFromSearchResult_(searchResult));
+    var matchedPattern = serp.findBlockPatternForHost_(serp.parseUrlFromSearchResult_(searchResult));
 
     if (matchedPattern && (
         !searchResult.classList.contains(serp.BLOCKED_SEARCH_RESULT_CLASS) &&
