@@ -13,6 +13,7 @@ var blocklist = {
     ADDBULKTOBLOCKLIST: 'addBulkToBlocklist',
     DELETEFROMBLOCKLIST: 'deleteFromBlocklist',
     FINISHEXPORT: 'finishExport',
+    HIDESHORTCUT: 'hide_shortcut_in_search_result',
 
     STRIP_WHITESPACE_REGEX: new RegExp('^\s+|\s+$', 'g'),
     HOST_REGEX: new RegExp('^https?://(www[.])?([0-9a-zA-Z.-]+).*$'),
@@ -105,6 +106,12 @@ var blocklist = {
             }
             // chrome.management.setEnabled(
             //     chrome.i18n.getMessage("@@extension_id"), !isDisable);
+          }
+          else if (request.type == blocklist.common.HIDESHORTCUT) {
+            sendResponse({
+              success: 1,
+              hide: data[blocklist.common.HIDESHORTCUT]
+            });
           }
         });
 

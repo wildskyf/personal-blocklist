@@ -200,29 +200,37 @@ blocklist.serp = {
  * @private
  */
 blocklist.serp.createLink_ = function(handler, pattern, className) {
-  var blockLink = document.createElement('a');
-  blockLink.setAttribute('dir', chrome.i18n.getMessage('textDirection'));
-  blockLink.className = blocklist.serp.BLOCK_LINK_CLASS;
-  blockLink.setAttribute('style', blocklist.serp.BLOCK_LINK_STYLE);
-  blockLink.href = 'javascript:;';  // Do nothing, no refresh.
-  blockLink.addEventListener('click', function() { handler(pattern) }, false);
+  return new Promise( resolve => {
+    browser.runtime.sendMessage({
+      type: blocklist.common.HIDESHORTCUT,
+    }).then( res => {
+      if (res.hide) return resolve(document.createElement('div'));
 
-  // Separate spans to avoid mixing latin chars with Arabic/Hebrew.
-  var prefixSpan = document.createElement('span');
-  var patternSpan = document.createElement('span');
-  var suffixSpan = document.createElement('span');
-  prefixSpan.appendChild(document.createTextNode(chrome.i18n.getMessage(className + 'Prefix')));
-  patternSpan.appendChild(document.createTextNode(pattern));
-  suffixSpan.appendChild(document.createTextNode(chrome.i18n.getMessage(className + 'Suffix')));
+      var blockLink = document.createElement('a');
+      blockLink.setAttribute('dir', chrome.i18n.getMessage('textDirection'));
+      blockLink.className = blocklist.serp.BLOCK_LINK_CLASS;
+      blockLink.setAttribute('style', blocklist.serp.BLOCK_LINK_STYLE);
+      blockLink.href = 'javascript:;';  // Do nothing, no refresh.
+      blockLink.addEventListener('click', function() { handler(pattern) }, false);
 
-  blockLink.appendChild(prefixSpan);
-  blockLink.appendChild(patternSpan);
-  blockLink.appendChild(suffixSpan);
+      // Separate spans to avoid mixing latin chars with Arabic/Hebrew.
+      var prefixSpan = document.createElement('span');
+      var patternSpan = document.createElement('span');
+      var suffixSpan = document.createElement('span');
+      prefixSpan.appendChild(document.createTextNode(chrome.i18n.getMessage(className + 'Prefix')));
+      patternSpan.appendChild(document.createTextNode(pattern));
+      suffixSpan.appendChild(document.createTextNode(chrome.i18n.getMessage(className + 'Suffix')));
 
-  var blockLinkDiv = document.createElement('div');
-  blockLinkDiv.className = className;
-  blockLinkDiv.appendChild(blockLink);
-  return blockLinkDiv;
+      blockLink.appendChild(prefixSpan);
+      blockLink.appendChild(patternSpan);
+      blockLink.appendChild(suffixSpan);
+
+      var blockLinkDiv = document.createElement('div');
+      blockLinkDiv.className = className;
+      blockLinkDiv.appendChild(blockLink);
+      resolve(blockLinkDiv);
+    });
+  })
 };
 
 /**
@@ -355,7 +363,7 @@ blocklist.serp.parseDomainFromSearchResult_ = (search_result) => {
  * @param {Element} searchResult Search result list element, including children.
  * @private
  */
-blocklist.serp.alterSearchResultNode_ = function(searchResult) {
+blocklist.serp.alterSearchResultNode_ = async function(searchResult) {
   var host = blocklist.serp.parseDomainFromSearchResult_(searchResult);
   if (!host) return;
 
@@ -377,7 +385,7 @@ blocklist.serp.alterSearchResultNode_ = function(searchResult) {
   // 1. search result should have a block link and doesn't have one already.
   // 2. search result should have an unblock link and doesn't have one already.
   if (blockLink === null && (!searchResult.classList.contains(blocklist.serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS))) {
-    var blockLinkDiv = blocklist.serp.createLink_(blocklist.serp.addBlocklistPattern_, host, 'blockLink');
+    var blockLinkDiv = await blocklist.serp.createLink_(blocklist.serp.addBlocklistPattern_, host, 'blockLink');
 
     // Replace existing link, or append.
     if (unblockLink !== null) {
@@ -392,7 +400,7 @@ blocklist.serp.alterSearchResultNode_ = function(searchResult) {
     var blockPattern = blocklist.serp.findBlockPatternForHost_(host);
     if (!blockPattern) return;
 
-    var unblockLinkDiv = blocklist.serp.createLink_(blocklist.serp.removeBlocklistPattern_, blockPattern, 'unblockLink');
+    var unblockLinkDiv = await blocklist.serp.createLink_(blocklist.serp.removeBlocklistPattern_, blockPattern, 'unblockLink');
 
     // Replace existing link, or append.
     if (blockLink !== null) {
@@ -486,7 +494,7 @@ blocklist.serp.hideSearchResults = function() {
  * Iterates through search results, adding links and applying blocklist filter.
  * @private
  */
-blocklist.serp.modifySearchResults_ = function() {
+blocklist.serp.modifySearchResults_ = async function() {
   var { serp } = blocklist;
 
   // Skip if personalized web search was explicitly disabled (&pws=0).
@@ -502,7 +510,9 @@ blocklist.serp.modifySearchResults_ = function() {
   // Add blocklist links to search results until all have been processed.
   if (serp.needsRefresh || processedSearchResultList.length < searchResultList.length) {
 
-    searchResultList.forEach( srl => serp.alterSearchResultNode_(srl) );
+    await searchResultList.forEach( async srl => {
+      return await serp.alterSearchResultNode_(srl)
+    });
 
     // Add/hide/show notification for removed results.
     var notificationDiv = document.querySelector(`div#${serp.NOTIFICATION_DIV_ID}`);
