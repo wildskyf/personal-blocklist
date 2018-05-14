@@ -199,38 +199,37 @@ blocklist.serp = {
  * @return {Element} A div element with the block link.
  * @private
  */
-blocklist.serp.createLink_ = function(handler, pattern, className) {
-  return new Promise( resolve => {
-    browser.runtime.sendMessage({
-      type: blocklist.common.HIDESHORTCUT,
-    }).then( res => {
-      if (res.hide) return resolve(document.createElement('div'));
+blocklist.serp.createLink_ = async function(handler, pattern, className) {
+  return browser.runtime.sendMessage({
+    type: blocklist.common.HIDESHORTCUT,
+  }).then( res => {
+    if (res.hide) return resolve(document.createElement('div'));
 
-      var blockLink = document.createElement('a');
-      blockLink.setAttribute('dir', chrome.i18n.getMessage('textDirection'));
-      blockLink.className = blocklist.serp.BLOCK_LINK_CLASS;
-      blockLink.setAttribute('style', blocklist.serp.BLOCK_LINK_STYLE);
-      blockLink.href = 'javascript:;';  // Do nothing, no refresh.
-      blockLink.addEventListener('click', function() { handler(pattern) }, false);
+    var blockLink = document.createElement('a');
+    blockLink.setAttribute('dir', chrome.i18n.getMessage('textDirection'));
+    blockLink.className = blocklist.serp.BLOCK_LINK_CLASS;
+    blockLink.setAttribute('style', blocklist.serp.BLOCK_LINK_STYLE);
+    blockLink.href = 'javascript:;';  // Do nothing, no refresh.
+    blockLink.addEventListener('click', function() { handler(pattern) }, false);
 
-      // Separate spans to avoid mixing latin chars with Arabic/Hebrew.
-      var prefixSpan = document.createElement('span');
-      var patternSpan = document.createElement('span');
-      var suffixSpan = document.createElement('span');
-      prefixSpan.appendChild(document.createTextNode(chrome.i18n.getMessage(className + 'Prefix')));
-      patternSpan.appendChild(document.createTextNode(pattern));
-      suffixSpan.appendChild(document.createTextNode(chrome.i18n.getMessage(className + 'Suffix')));
+    // Separate spans to avoid mixing latin chars with Arabic/Hebrew.
+    var prefixSpan = document.createElement('span');
+    var patternSpan = document.createElement('span');
+    var suffixSpan = document.createElement('span');
+    prefixSpan.appendChild(document.createTextNode(chrome.i18n.getMessage(className + 'Prefix')));
+    patternSpan.appendChild(document.createTextNode(pattern));
+    suffixSpan.appendChild(document.createTextNode(chrome.i18n.getMessage(className + 'Suffix')));
 
-      blockLink.appendChild(prefixSpan);
-      blockLink.appendChild(patternSpan);
-      blockLink.appendChild(suffixSpan);
+    blockLink.appendChild(prefixSpan);
+    blockLink.appendChild(patternSpan);
+    blockLink.appendChild(suffixSpan);
 
-      var blockLinkDiv = document.createElement('div');
-      blockLinkDiv.className = className;
-      blockLinkDiv.appendChild(blockLink);
-      resolve(blockLinkDiv);
-    });
-  })
+    var blockLinkDiv = document.createElement('div');
+    blockLinkDiv.className = className;
+    blockLinkDiv.appendChild(blockLink);
+
+    return blockLinkDiv;
+  });
 };
 
 /**
@@ -510,9 +509,11 @@ blocklist.serp.modifySearchResults_ = async function() {
   // Add blocklist links to search results until all have been processed.
   if (serp.needsRefresh || processedSearchResultList.length < searchResultList.length) {
 
-    await searchResultList.forEach( async srl => {
-      return await serp.alterSearchResultNode_(srl)
-    });
+    await Promise.all(
+      Array.from(searchResultList).map( srl => {
+        return serp.alterSearchResultNode_(srl)
+      })
+    )
 
     // Add/hide/show notification for removed results.
     var notificationDiv = document.querySelector(`div#${serp.NOTIFICATION_DIV_ID}`);
@@ -539,8 +540,9 @@ blocklist.serp.modifySearchResults_ = async function() {
  * @private
  */
 blocklist.serp.applyBlocklistFeatures_ = function() {
-  window.setInterval(function() {
-    blocklist.serp.modifySearchResults_();
+  window.setInterval(async function() {
+    await blocklist.serp.modifySearchResults_();
+    document.querySelectorAll('.blockLink + .blockLink').forEach( $dupLink => $dupLink.remove())
   }, blocklist.serp.REPEAT_INTERVAL_IN_MS);
 };
 
