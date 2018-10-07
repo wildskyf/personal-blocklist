@@ -342,7 +342,7 @@ manager.displayFullListLink = () => {
     return;
   }
 
-  $link.html(`<a href="#">${'fulllist' || chrome.i18n.getMessage('popupFullList')}</a>`);
+  $link.html(`<a href="#">${chrome.i18n.getMessage('popupFullList')}</a>`);
   $link.css({'padding-top': '1em', 'padding-bottom': '1em'});
   $link.on('click', () => {
     chrome.tabs.create({ url: chrome.runtime.getURL("/manager.html?isPage=1") });
