@@ -22,6 +22,12 @@ var { manager } = blocklist;
 manager.BL_NUM = 20;
 
 /**
+ * Whether current page is popup window or page
+ * @type {bool}
+ */
+manager.isPopupWindow = !(location.href && location.href.includes('isPage'));
+
+/**
  * Trim text which is too long to fit in the element. Use title to show complete
  * text.
  * @param {Object} element The element where the text shows.
@@ -328,6 +334,22 @@ manager.handleExportListRequest = response => {
   exportDiv.slideDown();
 };
 
+manager.displayFullListLink = () => {
+  var $link = $('#manager-full-list');
+
+  if (!manager.isPopupWindow) {
+    $link.remove();
+    return;
+  }
+
+  $link.html(`<a href="#">${'fulllist' || chrome.i18n.getMessage('popupFullList')}</a>`);
+  $link.css({'padding-top': '1em', 'padding-bottom': '1em'});
+  $link.on('click', () => {
+    chrome.tabs.create({ url: chrome.runtime.getURL("/manager.html?isPage=1") });
+    window.close();
+  });
+};
+
 /**
  * Callback that handles the refresh request.
  * @param {Array} response Response from the background page listener.
@@ -348,7 +370,7 @@ manager.handleRefreshResponse = response => {
 
   if (response.blocklist != undefined && response.blocklist.length > 0) {
 
-    manager.addBlockCurrentHostLink(response.blocklist);
+    if (manager.isPopupWindow) manager.addBlockCurrentHostLink(response.blocklist);
 
     var table = $('<table class="manager-table"><col width=30%><col width=80%></table>');
     var header = $('<tr><th>' + chrome.i18n.getMessage('operation') + '</th>' +
@@ -378,6 +400,8 @@ manager.handleRefreshResponse = response => {
     $('#manager-import-export-links').css({'float': importExportPosition});
     $('#manager-import-link').click(manager.showImportArea);
   }
+
+  manager.displayFullListLink();
 };
 
 /**
@@ -427,11 +451,13 @@ manager.constructHintMessage = (start, num, total) => {
   var preBtn = hintDiv.find('.prev-btn');
   var nextBtn = hintDiv.find('.next-btn');
   var end = start + num;
+  var hintStr = '';
+
   if (end >= total) {
     end = total;
   }
   if (total == 0) {
-    manager.addBlockCurrentHostLink([]);
+    if (manager.isPopupWindow) manager.addBlockCurrentHostLink([]);
     instructionDiv.css({ 'padding-top': '1em', 'padding-bottom': '1em' });
     preBtn.hide();
     nextBtn.hide();
@@ -440,33 +466,46 @@ manager.constructHintMessage = (start, num, total) => {
   }
   instructionDiv.hide();
 
-  if (start > 0) {
-    preBtn.show();
-    preBtn.click( () => {
-      manager.refresh(start - manager.BL_NUM, manager.BL_NUM);
-    });
+  if (manager.isPopupWindow) {
+    if (start > 0) {
+      preBtn.show();
+      preBtn.click( () => {
+        manager.refresh(start - manager.BL_NUM, manager.BL_NUM);
+      });
+    }
+    else {
+      preBtn.hide();
+    }
+
+    if (end < total) {
+      nextBtn.show();
+      nextBtn.click( () => {
+        var deleteCount = $('tr.deleted-pattern').length;
+        manager.refresh(start + manager.BL_NUM - deleteCount, manager.BL_NUM);
+      });
+    }
+    else {
+      nextBtn.hide();
+    }
+
+    hintStr += (start + 1) + ' - ' + end + ' of ' + total;
+    hintDiv.find('#manager-pattern-hint-msg').text(hintStr);
+    hintDiv.attr('dir', 'ltr');  // No translation, always left-to-right.
   }
   else {
+    // show all result
+
     preBtn.hide();
-  }
-
-  if (end < total) {
-    nextBtn.show();
-    nextBtn.click( () => {
-      var deleteCount = $('tr.deleted-pattern').length;
-      manager.refresh(start + manager.BL_NUM - deleteCount, manager.BL_NUM);
-    });
-  }
-  else {
     nextBtn.hide();
-  }
+    manager.refresh(0, -1);
 
-  var str = '';
-  str += (start + 1) + ' - ' + end + ' of ' + total;
-  hintDiv.find('#manager-pattern-hint-msg').text(str);
-  hintDiv.attr('dir', 'ltr');  // No translation, always left-to-right.
+    hintStr += 'All of ' + total;
+    hintDiv.find('#manager-pattern-hint-msg').text(hintStr);
+    hintDiv.attr('dir', 'ltr');  // No translation, always left-to-right.
+  }
 };
 
 document.addEventListener('DOMContentLoaded', () => {
   manager.refresh(0, manager.BL_NUM);
 });
+
