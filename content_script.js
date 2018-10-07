@@ -10,6 +10,8 @@
  * @const
  */
 blocklist.serp = {
+
+  isDEV: false,
   /**
    * List of the search results tags on Google SERP.
    * @type {[string]}
@@ -205,6 +207,8 @@ blocklist.serp.createLink_ = async function(handler, pattern, className) {
   }).then( res => {
     if (res.hide) return resolve(document.createElement('div'));
 
+    document.body.classList.add('show-block-link');
+
     var blockLink = document.createElement('a');
     blockLink.setAttribute('dir', chrome.i18n.getMessage('textDirection'));
     blockLink.className = blocklist.serp.BLOCK_LINK_CLASS;
@@ -239,12 +243,15 @@ blocklist.serp.createLink_ = async function(handler, pattern, className) {
  */
 blocklist.serp.addLink = function(searchResult, linkDiv) {
   var { serp } = blocklist;
-  var regularResultSpan = searchResult.querySelector(`div.${serp.SEARCH_RESULT_CITE_DIV_CLASS}`);
+  var regularResultSpan = searchResult.querySelector(`div.${serp.SEARCH_RESULT_CITE_DIV_CLASS}`) ||
+                          searchResult.querySelector('cite').parentElement.parentElement;
   var definitionResultSpan = searchResult.querySelector(`span.${serp.DEFINITION_RESULT_LOWER_LINKS_CLASS}`);
   var shortResultDiv = searchResult.querySelector(`div.${serp.SEARCH_RESULT_BODY_CLASS} span.${serp.SEARCH_RESULT_SHORT_LINKS_CLASS}`);
 
+  blocklist.serp.isDEV && console.log('in addLink', searchResult, regularResultSpan, definitionResultSpan, shortResultDiv);
+
   if (regularResultSpan !== null) {
-    regularResultSpan.parentNode.appendChild(linkDiv);
+    searchResult.appendChild(linkDiv);
   }
   else if (definitionResultSpan !== null) {
     definitionResultSpan.parentNode.parentNode.appendChild(linkDiv);
@@ -341,10 +348,12 @@ blocklist.serp.removeBlocklistPattern_ = function(pattern) {
  * @private
  */
 blocklist.serp.parseUrlFromSearchResult_ = function(searchResult) {
-  var searchResultAnchor = searchResult.querySelector('h3 > a');
+  var searchResultAnchor = searchResult.querySelector('h3 > a') || (
+    searchResult.querySelector('h3') && searchResult.querySelector('h3').parentElement);
   if (searchResultAnchor === null) return '';
 
   var url = searchResultAnchor.getAttribute('href');
+  if (!url || url.match(/^\//)) return '';
   // Sometimes, the link is an intermediate step through another google service,
   // for example Google Translate. This regex parses the target url, so that we
   // don't block translate.google.com instead of the target host.
@@ -364,6 +373,7 @@ blocklist.serp.parseDomainFromSearchResult_ = (search_result) => {
  */
 blocklist.serp.alterSearchResultNode_ = async function(searchResult) {
   var host = blocklist.serp.parseDomainFromSearchResult_(searchResult);
+  blocklist.serp.isDEV && console.log('in alterSearchResultNode_', searchResult, host);
   if (!host) return;
 
   // Skip if there is already a gws-side block link, this is a book search
@@ -508,10 +518,11 @@ blocklist.serp.modifySearchResults_ = async function() {
 
   // Add blocklist links to search results until all have been processed.
   if (serp.needsRefresh || processedSearchResultList.length < searchResultList.length) {
+    blocklist.serp.isDEV && console.log('searchResultList', searchResultList);
 
     await Promise.all(
-      Array.from(searchResultList).map( srl => {
-        return serp.alterSearchResultNode_(srl)
+      Array.from(searchResultList).map( searchResultBlock => {
+        return serp.alterSearchResultNode_(searchResultBlock)
       })
     )
 

@@ -238,6 +238,8 @@
 
       "js": ["common.js", "content_script.js"],
 
+      "css": ["content.css"],
+
       "run_at": "document_end"
     }
   ]
