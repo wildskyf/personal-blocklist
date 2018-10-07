@@ -520,11 +520,7 @@ blocklist.serp.modifySearchResults_ = async function() {
   if (serp.needsRefresh || processedSearchResultList.length < searchResultList.length) {
     blocklist.serp.isDEV && console.log('searchResultList', searchResultList);
 
-    await Promise.all(
-      Array.from(searchResultList).map( searchResultBlock => {
-        return serp.alterSearchResultNode_(searchResultBlock)
-      })
-    )
+    await Promise.all(Array.from(searchResultList, block => serp.alterSearchResultNode_(block)));
 
     // Add/hide/show notification for removed results.
     var notificationDiv = document.querySelector(`div#${serp.NOTIFICATION_DIV_ID}`);
