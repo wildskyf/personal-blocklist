@@ -59,6 +59,10 @@
     "message": "在Google搜索结果中被屏蔽的网站",
     "description": "Title of the blocklist management pop-up window."
   },
+  "popupFullList": {
+    "message": "显示所有屏蔽的网站",
+    "description": "Link to open page showing full list of blocked sites."
+  },
   "operation": {
     "message": "操作",
     "description": "Table header for operations."

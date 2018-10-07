@@ -59,6 +59,10 @@
     "message": "Domainek/hosztok, melyeket kitiltott a Google keresési találataiból",
     "description": "Title of the blocklist management pop-up window."
   },
+  "popupFullList": {
+    "message": "Show Full List of Blocked Sites",
+    "description": "Link to open page showing full list of blocked sites."
+  },
   "operation": {
     "message": "Művelet",
     "description": "Table header for operations."

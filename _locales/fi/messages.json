@@ -59,6 +59,10 @@
     "message": "Sivustot, jotka estetään Google-hakutuloksissa",
     "description": "Title of the blocklist management pop-up window."
   },
+  "popupFullList": {
+    "message": "Show Full List of Blocked Sites",
+    "description": "Link to open page showing full list of blocked sites."
+  },
   "operation": {
     "message": "Toimenpide",
     "description": "Table header for operations."

@@ -59,6 +59,10 @@
     "message": "Domini/Host bloccati dai risultati di ricerca di Google",
     "description": "Title of the blocklist management pop-up window."
   },
+  "popupFullList": {
+    "message": "Show Full List of Blocked Sites",
+    "description": "Link to open page showing full list of blocked sites."
+  },
   "operation": {
     "message": "Operazione",
     "description": "Table header for operations."

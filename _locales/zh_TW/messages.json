@@ -59,6 +59,10 @@
     "message": "在 Google 搜尋結果中被封鎖的網站",
     "description": "Title of the blocklist management pop-up window."
   },
+  "popupFullList": {
+    "message": "顯示所有被封鎖的網站",
+    "description": "Link to open page showing full list of blocked sites."
+  },
   "operation": {
     "message": "操作",
     "description": "Table header for operations."

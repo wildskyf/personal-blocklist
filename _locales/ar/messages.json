@@ -59,6 +59,10 @@
     "message": "النطق التي تم عدم ادراجها في نتائج بحث Google",
     "description": "Title of the blocklist management pop-up window."
   },
+  "popupFullList": {
+    "message": "Show Full List of Blocked Sites",
+    "description": "Link to open page showing full list of blocked sites."
+  },
   "operation": {
     "message": "عملية ",
     "description": "Table header for operations."
