@@ -401,7 +401,7 @@ blocklist.serp.alterSearchResultNode_ = async function(searchResult) {
       unblockLink.parentNode.replaceChild(blockLinkDiv, unblockLink);
     }
     else {
-      blocklist.serp.addLink(searchResult, blockLinkDiv);
+      if (!searchResult.querySelector('.blockLink')) blocklist.serp.addLink(searchResult, blockLinkDiv);
     }
   }
   else if (unblockLink === null && searchResult.classList.contains(blocklist.serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS)) {
@@ -416,7 +416,7 @@ blocklist.serp.alterSearchResultNode_ = async function(searchResult) {
       blockLink.parentNode.replaceChild(unblockLinkDiv, blockLink);
     }
     else {
-      blocklist.serp.addLink(searchResult, unblockLinkDiv);
+      if (!searchResult.querySelector('.unblockLink')) blocklist.serp.addLink(searchResult, unblockLinkDiv);
     }
     return true;
   }
