@@ -212,11 +212,21 @@ manager.sendRefresh = res => {
 manager.refresh = (start, num) => {
   if (start < 0) start = 0;
 
-  browser.runtime.sendMessage({
-    'type': blocklist.common.GETBLOCKLIST,
-    'start': start,
-    'num': num
-  }).then(manager.handleRefreshResponse);
+  if (manager.isPopupWindow) {
+    browser.runtime.sendMessage({
+      'type': blocklist.common.GETBLOCKLIST,
+      'start': start,
+      'num': num
+    }).then(manager.handleRefreshResponse);
+  }
+  else {
+    browser.runtime.sendMessage({
+      'type': blocklist.common.GETBLOCKLIST,
+      'start': start,
+      'num': -1
+    }).then(manager.handleRefreshResponse);
+  }
+
 };
 
 /**
@@ -497,7 +507,6 @@ manager.constructHintMessage = (start, num, total) => {
 
     preBtn.hide();
     nextBtn.hide();
-    manager.refresh(0, -1);
 
     hintStr += 'All of ' + total;
     hintDiv.find('#manager-pattern-hint-msg').text(hintStr);
