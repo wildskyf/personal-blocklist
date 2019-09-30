@@ -88,7 +88,7 @@ blocklist.serp = {
    * Class of the search results block div.
    * @type {string}
    */
-  SEARCH_RESULT_BLOCK_CLASS: 'ires',
+  SEARCH_RESULT_BLOCK_CLASS: 'bottomads',
 
   /**
    * Id of the div that displays the result removal notification.
