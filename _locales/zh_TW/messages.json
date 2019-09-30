@@ -92,7 +92,7 @@
     "description": "Message that x patterns were added to blocklist."
   },
   "noPatterns": {
-    "message": "還沒有任何網站被封鎖。",
+    "message": "尚無網站被封鎖。",
     "description": "Error message for an empty blocklist."
   },
   "blockCurrent": {
@@ -108,11 +108,11 @@
     "description": "Error message for editing a invalid pattern."
   },
   "exportDialogMessage": {
-    "message": "同步到 Google 帳號後，您是否希望停用此 add-on ？",
+    "message": "同步到 Google 帳號後，您是否希望停用此套件？",
     "description": "Message in the export dialog box."
   },
   "exportDialogTitle": {
-    "message": "停用這個 add-on",
+    "message": "停用此套件",
     "description": "Title in the export dialog box."
   },
   "exportDialogYes": {
