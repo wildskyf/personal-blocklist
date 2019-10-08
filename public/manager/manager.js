@@ -355,7 +355,7 @@ manager.displayFullListLink = () => {
   $link.html(`<a href="#">${chrome.i18n.getMessage('popupFullList')}</a>`);
   $link.css({'padding-top': '1em', 'padding-bottom': '1em'});
   $link.on('click', () => {
-    chrome.tabs.create({ url: chrome.runtime.getURL("/manager/manager.html?isPage=1") });
+    chrome.tabs.create({ url: chrome.runtime.getURL("/index.html") });
     window.close();
   });
 };
