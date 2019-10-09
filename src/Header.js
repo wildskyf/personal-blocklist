@@ -6,7 +6,7 @@ const popUpTitle = chrome.i18n.getMessage('popupTitle')
 
 const Header = () => {
   return (
-    <div className="header">{popUpTitle}</div>
+    <div className='header'>{popUpTitle}</div>
   )
 }
 

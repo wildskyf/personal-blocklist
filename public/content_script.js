@@ -119,7 +119,7 @@ blocklist.serp = {
    * Style of the notification for removed search results.
    * @type {string}
    */
-  NOTIFICATION_STYLE : 'font-style:italic,margin-top:1em,margin-bottom:1em,',
+  NOTIFICATION_STYLE: 'font-style:italic,margin-top:1em,margin-bottom:1em,',
 
   /**
    * Style for block links. Prevents the word "Block" from appearing on a separate
@@ -146,7 +146,7 @@ blocklist.serp = {
    * @type {RegExp}
    */
   REDIRECT_REGEX: new RegExp(
-      '^(https?://[a-z.]+[.]?google([.][a-z]{2,4}){1,2})?/' +
+    '^(https?://[a-z.]+[.]?google([.][a-z]{2,4}){1,2})?/' +
       '[a-z_-]*[?]((img)?u|.*&(img)?u)(rl)?=([^&]*[.][^&]*).*$'),
 
   /**
@@ -190,8 +190,7 @@ blocklist.serp = {
    * @type {bool}
    */
   needsRefresh: false
-};
-
+}
 
 /**
  * Creates a DOM element containing a "block domain" or "unblock domain" link.
@@ -201,89 +200,86 @@ blocklist.serp = {
  * @return {Element} A div element with the block link.
  * @private
  */
-blocklist.serp.createLink_ = async function(handler, pattern, className) {
+blocklist.serp.createLink_ = async function (handler, pattern, className) {
   return browser.runtime.sendMessage({
-    type: blocklist.common.HIDESHORTCUT,
-  }).then( res => {
-    if (res.hide) return resolve(document.createElement('div'));
+    type: blocklist.common.HIDESHORTCUT
+  }).then(res => {
+    if (res.hide) return resolve(document.createElement('div'))
 
-    document.body.classList.add('show-block-link');
+    document.body.classList.add('show-block-link')
 
-    var blockLink = document.createElement('a');
-    blockLink.setAttribute('dir', chrome.i18n.getMessage('textDirection'));
-    blockLink.className = blocklist.serp.BLOCK_LINK_CLASS;
-    blockLink.setAttribute('style', blocklist.serp.BLOCK_LINK_STYLE);
-    blockLink.href = 'javascript:;';  // Do nothing, no refresh.
-    blockLink.addEventListener('click', function() { handler(pattern) }, false);
+    var blockLink = document.createElement('a')
+    blockLink.setAttribute('dir', chrome.i18n.getMessage('textDirection'))
+    blockLink.className = blocklist.serp.BLOCK_LINK_CLASS
+    blockLink.setAttribute('style', blocklist.serp.BLOCK_LINK_STYLE)
+    blockLink.href = 'javascript:;' // Do nothing, no refresh.
+    blockLink.addEventListener('click', function () { handler(pattern) }, false)
 
     // Separate spans to avoid mixing latin chars with Arabic/Hebrew.
-    var prefixSpan = document.createElement('span');
-    var patternSpan = document.createElement('span');
-    var suffixSpan = document.createElement('span');
+    var prefixSpan = document.createElement('span')
+    var patternSpan = document.createElement('span')
+    var suffixSpan = document.createElement('span')
 
-    prefixSpan.appendChild(document.createTextNode(chrome.i18n.getMessage(className + 'Prefix')));
-    patternSpan.appendChild(document.createTextNode(pattern));
-    suffixSpan.appendChild(document.createTextNode(chrome.i18n.getMessage(className + 'Suffix')));
+    prefixSpan.appendChild(document.createTextNode(chrome.i18n.getMessage(className + 'Prefix')))
+    patternSpan.appendChild(document.createTextNode(pattern))
+    suffixSpan.appendChild(document.createTextNode(chrome.i18n.getMessage(className + 'Suffix')))
 
-    blockLink.appendChild(prefixSpan);
-    blockLink.appendChild(patternSpan);
-    blockLink.appendChild(suffixSpan);
+    blockLink.appendChild(prefixSpan)
+    blockLink.appendChild(patternSpan)
+    blockLink.appendChild(suffixSpan)
 
-    var blockLinkDiv = document.createElement('div');
-    blockLinkDiv.className = className;
-    blockLinkDiv.appendChild(blockLink);
+    var blockLinkDiv = document.createElement('div')
+    blockLinkDiv.className = className
+    blockLinkDiv.appendChild(blockLink)
 
-    return blockLinkDiv;
-  });
-};
+    return blockLinkDiv
+  })
+}
 
 /**
  * Adds a block or unblock link to a search result.
  * @param {Element} searchResult Search result list element, including children.
  * @param {Object} linkDiv Div element with the link to add.
  */
-blocklist.serp.addLink = function(searchResult, linkDiv) {
-  var { serp } = blocklist;
+blocklist.serp.addLink = function (searchResult, linkDiv) {
+  var { serp } = blocklist
   var regularResultSpan = searchResult.querySelector(`div.${serp.SEARCH_RESULT_CITE_DIV_CLASS}`) ||
-                          searchResult.querySelector('cite').parentElement.parentElement;
-  var definitionResultSpan = searchResult.querySelector(`span.${serp.DEFINITION_RESULT_LOWER_LINKS_CLASS}`);
-  var shortResultDiv = searchResult.querySelector(`div.${serp.SEARCH_RESULT_BODY_CLASS} span.${serp.SEARCH_RESULT_SHORT_LINKS_CLASS}`);
+                          searchResult.querySelector('cite').parentElement.parentElement
+  var definitionResultSpan = searchResult.querySelector(`span.${serp.DEFINITION_RESULT_LOWER_LINKS_CLASS}`)
+  var shortResultDiv = searchResult.querySelector(`div.${serp.SEARCH_RESULT_BODY_CLASS} span.${serp.SEARCH_RESULT_SHORT_LINKS_CLASS}`)
 
-  blocklist.serp.isDEV && console.log('in addLink', searchResult, regularResultSpan, definitionResultSpan, shortResultDiv);
+  blocklist.serp.isDEV && console.log('in addLink', searchResult, regularResultSpan, definitionResultSpan, shortResultDiv)
 
   if (regularResultSpan !== null) {
-    searchResult.appendChild(linkDiv);
+    searchResult.appendChild(linkDiv)
+  } else if (definitionResultSpan !== null) {
+    definitionResultSpan.parentNode.parentNode.appendChild(linkDiv)
+  } else if (shortResultDiv !== null) {
+    shortResultDiv.parentNode.parentNode.appendChild(linkDiv)
   }
-  else if (definitionResultSpan !== null) {
-    definitionResultSpan.parentNode.parentNode.appendChild(linkDiv);
-  }
-  else if (shortResultDiv !== null) {
-    shortResultDiv.parentNode.parentNode.appendChild(linkDiv);
-  }
-};
+}
 
 /**
  * Adds a DOM element containing a notification for removed results.
  * @private
  */
-blocklist.serp.addBlockListNotification_ = function() {
-  var showBlockedLink = document.createElement('a');
-  showBlockedLink.href = 'javascript:;';  // Do nothing, no refresh.
-  showBlockedLink.appendChild(document.createTextNode(chrome.i18n.getMessage('showBlockedLink')));
-  showBlockedLink.addEventListener('click', function() { blocklist.serp.showBlockedResults_() }, false);
+blocklist.serp.addBlockListNotification_ = function () {
+  var showBlockedLink = document.createElement('a')
+  showBlockedLink.href = 'javascript:;' // Do nothing, no refresh.
+  showBlockedLink.appendChild(document.createTextNode(chrome.i18n.getMessage('showBlockedLink')))
+  showBlockedLink.addEventListener('click', function () { blocklist.serp.showBlockedResults_() }, false)
 
-  var blocklistNotification = document.createElement('div');
-  blocklistNotification.id = blocklist.serp.NOTIFICATION_DIV_ID;
-  blocklistNotification.setAttribute('dir', chrome.i18n.getMessage('textDirection'));
-  blocklistNotification.appendChild(document.createTextNode(chrome.i18n.getMessage('blocklistNotification') + ' ('));
-  blocklistNotification.appendChild(showBlockedLink);
-  blocklistNotification.appendChild(document.createTextNode(').'));
-  blocklistNotification.setAttribute('style', blocklist.serp.NOTIFICATION_STYLE);
+  var blocklistNotification = document.createElement('div')
+  blocklistNotification.id = blocklist.serp.NOTIFICATION_DIV_ID
+  blocklistNotification.setAttribute('dir', chrome.i18n.getMessage('textDirection'))
+  blocklistNotification.appendChild(document.createTextNode(chrome.i18n.getMessage('blocklistNotification') + ' ('))
+  blocklistNotification.appendChild(showBlockedLink)
+  blocklistNotification.appendChild(document.createTextNode(').'))
+  blocklistNotification.setAttribute('style', blocklist.serp.NOTIFICATION_STYLE)
 
-  searchResultBlock = document.querySelector('div#' + blocklist.serp.SEARCH_RESULT_BLOCK_CLASS);
-  searchResultBlock.parentNode.insertBefore(blocklistNotification, searchResultBlock.nextSibling);
-};
-
+  searchResultBlock = document.querySelector('div#' + blocklist.serp.SEARCH_RESULT_BLOCK_CLASS)
+  searchResultBlock.parentNode.insertBefore(blocklistNotification, searchResultBlock.nextSibling)
+}
 
 /**
  * Returns a list of search result nodes that have a specified CSS class name.
@@ -291,56 +287,56 @@ blocklist.serp.addBlockListNotification_ = function() {
  * @return {!NodeList} list of search result nodes.
  * @private
  */
-blocklist.serp.getSearchResultNodes_ = function(className) {
-  var selector = blocklist.serp.SEARCH_RESULT_TAGS.map( tagName => `${tagName}.${className}`).join(', ');
-  return document.querySelectorAll(selector);
-};
+blocklist.serp.getSearchResultNodes_ = function (className) {
+  var selector = blocklist.serp.SEARCH_RESULT_TAGS.map(tagName => `${tagName}.${className}`).join(', ')
+  return document.querySelectorAll(selector)
+}
 
 /**
  * Makes blocked search results visible again.
  * @private
  */
-blocklist.serp.showBlockedResults_ = function() {
-  var blockedResultList = blocklist.serp.getSearchResultNodes_(blocklist.serp.BLOCKED_SEARCH_RESULT_CLASS);
+blocklist.serp.showBlockedResults_ = function () {
+  var blockedResultList = blocklist.serp.getSearchResultNodes_(blocklist.serp.BLOCKED_SEARCH_RESULT_CLASS)
 
-  blockedResultList.forEach( brl => {
-    brl.setAttribute('style', blocklist.serp.BLOCKED_VISIBLE_STYLE);
-    brl.classList.remove(blocklist.serp.BLOCKED_SEARCH_RESULT_CLASS);
-    brl.classList.add(blocklist.serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS);
-  });
+  blockedResultList.forEach(brl => {
+    brl.setAttribute('style', blocklist.serp.BLOCKED_VISIBLE_STYLE)
+    brl.classList.remove(blocklist.serp.BLOCKED_SEARCH_RESULT_CLASS)
+    brl.classList.add(blocklist.serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS)
+  })
 
-  blocklist.serp.needsRefresh = true;
-};
+  blocklist.serp.needsRefresh = true
+}
 
 /**
  * Adds a pattern to the blocklist.
  * @param {string} pattern The pattern to blocklist.
  * @private
  */
-blocklist.serp.addBlocklistPattern_ = function(pattern) {
+blocklist.serp.addBlocklistPattern_ = function (pattern) {
   browser.runtime.sendMessage({
     type: blocklist.common.ADDTOBLOCKLIST,
     pattern: pattern,
     ei: blocklist.serp.eventId,
     enc: blocklist.serp.isHttps
-  }).then(blocklist.serp.handleAddToBlocklistResponse);
-};
+  }).then(blocklist.serp.handleAddToBlocklistResponse)
+}
 
 /**
  * Removes a pattern from the blocklist.
  * @param {string} pattern The pattern to remove from the blocklist.
  * @private
  */
-blocklist.serp.removeBlocklistPattern_ = function(pattern) {
+blocklist.serp.removeBlocklistPattern_ = function (pattern) {
   browser.runtime.sendMessage({
     type: blocklist.common.DELETEFROMBLOCKLIST,
     pattern: pattern,
     ei: blocklist.serp.eventId,
     enc: blocklist.serp.isHttps
   })
-  .then(blocklist.serp.handleDeleteFromBlocklistResponse);
-  return true;
-};
+    .then(blocklist.serp.handleDeleteFromBlocklistResponse)
+  return true
+}
 
 /**
  * Parses the domain out of a Google search result page.
@@ -348,23 +344,23 @@ blocklist.serp.removeBlocklistPattern_ = function(pattern) {
  * @return {string} A domain if found; or an empty string.
  * @private
  */
-blocklist.serp.parseUrlFromSearchResult_ = function(searchResult) {
+blocklist.serp.parseUrlFromSearchResult_ = function (searchResult) {
   var searchResultAnchor = searchResult.querySelector('h3 > a') || (
-    searchResult.querySelector('h3') && searchResult.querySelector('h3').parentElement);
-  if (searchResultAnchor === null) return '';
+    searchResult.querySelector('h3') && searchResult.querySelector('h3').parentElement)
+  if (searchResultAnchor === null) return ''
 
-  var url = searchResultAnchor.getAttribute('href');
-  if (!url || url.match(/^\//)) return '';
+  var url = searchResultAnchor.getAttribute('href')
+  if (!url || url.match(/^\//)) return ''
   // Sometimes, the link is an intermediate step through another google service,
   // for example Google Translate. This regex parses the target url, so that we
   // don't block translate.google.com instead of the target host.
-  url = url.replace(blocklist.serp.REDIRECT_REGEX, '$7');
+  url = url.replace(blocklist.serp.REDIRECT_REGEX, '$7')
   // Identify domain by stripping protocol and path.
-  return decodeURI(url);
-};
+  return decodeURI(url)
+}
 
 blocklist.serp.parseDomainFromSearchResult_ = (search_result) => {
-  return blocklist.serp.parseUrlFromSearchResult_(search_result).replace(blocklist.common.HOST_REGEX, '$2');
+  return blocklist.serp.parseUrlFromSearchResult_(search_result).replace(blocklist.common.HOST_REGEX, '$2')
 }
 
 /**
@@ -372,75 +368,72 @@ blocklist.serp.parseDomainFromSearchResult_ = (search_result) => {
  * @param {Element} searchResult Search result list element, including children.
  * @private
  */
-blocklist.serp.alterSearchResultNode_ = async function(searchResult) {
-  var host = blocklist.serp.parseDomainFromSearchResult_(searchResult);
-  blocklist.serp.isDEV && console.log('in alterSearchResultNode_', searchResult, host);
+blocklist.serp.alterSearchResultNode_ = async function (searchResult) {
+  var host = blocklist.serp.parseDomainFromSearchResult_(searchResult)
+  blocklist.serp.isDEV && console.log('in alterSearchResultNode_', searchResult, host)
 
-  if (!host) return;
+  if (!host) return
 
   // Skip if there is already a gws-side block link, this is a book search
   // vertical results, or an internal url that was not resolved.
-  if (searchResult.querySelector( '.' + blocklist.serp.GWS_BLOCK_LINK_CLASS) !== null ||
-      searchResult.querySelector( 'td.' + blocklist.serp.BOOK_SEARCH_RESULT_CLASS) !== null ||
+  if (searchResult.querySelector('.' + blocklist.serp.GWS_BLOCK_LINK_CLASS) !== null ||
+      searchResult.querySelector('td.' + blocklist.serp.BOOK_SEARCH_RESULT_CLASS) !== null ||
       host[0] == '/') {
     // Mark search result as processed.
-    searchResult.classList.add(blocklist.serp.PERSONAL_BLOCKLIST_CLASS);
-    return;
+    searchResult.classList.add(blocklist.serp.PERSONAL_BLOCKLIST_CLASS)
+    return
   }
 
   // Any currently appended block/unblock links need to be replaced.
-  blockLink = searchResult.querySelector('div.blockLink');
-  unblockLink = searchResult.querySelector('div.unblockLink');
+  blockLink = searchResult.querySelector('div.blockLink')
+  unblockLink = searchResult.querySelector('div.unblockLink')
 
   // Two main cases where we need to take action:
   // 1. search result should have a block link and doesn't have one already.
   // 2. search result should have an unblock link and doesn't have one already.
   if (blockLink === null && (!searchResult.classList.contains(blocklist.serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS))) {
-    await blocklist.serp.createLink_(blocklist.serp.addBlocklistPattern_, host, 'blockLink').then( blockLinkDiv => {
-      var blockLink = searchResult.querySelector('div.blockLink');
-      var unblockLink = searchResult.querySelector('div.unblockLink');
+    await blocklist.serp.createLink_(blocklist.serp.addBlocklistPattern_, host, 'blockLink').then(blockLinkDiv => {
+      var blockLink = searchResult.querySelector('div.blockLink')
+      var unblockLink = searchResult.querySelector('div.unblockLink')
 
       // Replace existing link, or append.
       if (unblockLink && unblockLink.parentNode) {
-        unblockLink.parentNode.replaceChild(blockLinkDiv, unblockLink);
+        unblockLink.parentNode.replaceChild(blockLinkDiv, unblockLink)
+      } else if (!searchResult.querySelector('.blockLink')) {
+        blocklist.serp.addLink(searchResult, blockLinkDiv)
       }
-      else if (!searchResult.querySelector('.blockLink')) {
-        blocklist.serp.addLink(searchResult, blockLinkDiv);
-      }
-    });
-  }
-  else if (unblockLink === null && searchResult.classList.contains(blocklist.serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS)) {
+    })
+  } else if (unblockLink === null && searchResult.classList.contains(blocklist.serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS)) {
     // Use the pattern that caused the block, which might differ from host.
-    var blockPattern = blocklist.serp.findBlockPatternForHost_(host);
-    if (!blockPattern) return;
+    var blockPattern = blocklist.serp.findBlockPatternForHost_(host)
+    if (!blockPattern) return
 
-    blocklist.serp.createLink_(blocklist.serp.removeBlocklistPattern_, blockPattern, 'unblockLink').then( unblockLinkDiv => {
-      var blockLink = searchResult.querySelector('div.blockLink');
-      var unblockLink = searchResult.querySelector('div.unblockLink');
+    blocklist.serp.createLink_(blocklist.serp.removeBlocklistPattern_, blockPattern, 'unblockLink').then(unblockLinkDiv => {
+      var blockLink = searchResult.querySelector('div.blockLink')
+      var unblockLink = searchResult.querySelector('div.unblockLink')
 
       // Replace existing link, or append.
       if (blockLink && blockLink.parentNode) {
-        blockLink.parentNode.replaceChild(unblockLinkDiv, blockLink);
+        blockLink.parentNode.replaceChild(unblockLinkDiv, blockLink)
+      } else if (!searchResult.querySelector('.unblockLink')) {
+        blocklist.serp.addLink(searchResult, unblockLinkDiv)
       }
-      else if (!searchResult.querySelector('.unblockLink')) {
-        blocklist.serp.addLink(searchResult, unblockLinkDiv);
-      }
-    });
+    })
   }
 
   // Mark search result as processed.
-  searchResult.classList.add(blocklist.serp.PERSONAL_BLOCKLIST_CLASS);
-  return true;
-};
+  searchResult.classList.add(blocklist.serp.PERSONAL_BLOCKLIST_CLASS)
+  return true
+}
 
 /**
  * Removes a search result from the page.
  * @param {Object} searchResult Search result list element (including children).
  */
-blocklist.serp.hideSearchResult = function(searchResult) {
-  searchResult.setAttribute('style', 'display:none;');
-  searchResult.classList.add(blocklist.serp.BLOCKED_SEARCH_RESULT_CLASS);
-};
+blocklist.serp.hideSearchResult = function (searchResult) {
+  searchResult.setAttribute('style', 'display:none;')
+  searchResult.classList.add(blocklist.serp.BLOCKED_SEARCH_RESULT_CLASS)
+}
 
 /**
  * Return a list of subdomains. for example, a.d.c.d will return
@@ -449,14 +442,14 @@ blocklist.serp.hideSearchResult = function(searchResult) {
  * @return {Array.<string>} Suddomain list.
  * @private
  */
-blocklist.serp.extractSubDomains_ = function(pattern) {
-  var subdomains = [];
-  var parts = pattern.split('.');
+blocklist.serp.extractSubDomains_ = function (pattern) {
+  var subdomains = []
+  var parts = pattern.split('.')
   for (var i = parts.length - 2; i >= 0; --i) {
-    subdomains.push(parts.slice(i).join('.'));
+    subdomains.push(parts.slice(i).join('.'))
   }
-  return subdomains;
-};
+  return subdomains
+}
 
 /**
  * Checks a hostname against the blocklist patterns.
@@ -466,39 +459,38 @@ blocklist.serp.extractSubDomains_ = function(pattern) {
  */
 blocklist.serp.findBlockPatternForHost_ = result_url => {
   // hide as long as result_url (partly) match one of the list blocklist.serp.blocklist
-  var matched_pattern = '';
+  var matched_pattern = ''
 
-  for (let block_pattern of blocklist.serp.blocklist) {
+  for (const block_pattern of blocklist.serp.blocklist) {
     if (result_url.includes(block_pattern)) {
-      matched_pattern = block_pattern;
-      break;
+      matched_pattern = block_pattern
+      break
     }
   }
 
-  return matched_pattern;
-};
+  return matched_pattern
+}
 
 /**
  * Removes all search results that match the blocklist.
  */
-blocklist.serp.hideSearchResults = function() {
-  const { serp } = blocklist;
-  var searchResultList = serp.getSearchResultNodes_(serp.SEARCH_RESULT_CLASS);
+blocklist.serp.hideSearchResults = function () {
+  const { serp } = blocklist
+  var searchResultList = serp.getSearchResultNodes_(serp.SEARCH_RESULT_CLASS)
 
-  searchResultList.forEach( searchResult => {
-    var shouldBeBlocked = serp.findBlockPatternForHost_(serp.parseUrlFromSearchResult_(searchResult)); // true means blocked
+  searchResultList.forEach(searchResult => {
+    var shouldBeBlocked = serp.findBlockPatternForHost_(serp.parseUrlFromSearchResult_(searchResult)) // true means blocked
 
     if (shouldBeBlocked && (
-        !searchResult.classList.contains(serp.BLOCKED_SEARCH_RESULT_CLASS) &&
+      !searchResult.classList.contains(serp.BLOCKED_SEARCH_RESULT_CLASS) &&
         !searchResult.classList.contains(serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS)
     )) {
       if (searchResult.parentNode.classList.contains(serp.SHOWED_GWS_BLOCK_LINK_CLASS)) {
-        searchResult.setAttribute('style', serp.BLOCKED_VISIBLE_STYLE);
-        searchResult.classList.remove(serp.BLOCKED_SEARCH_RESULT_CLASS);
-        searchResult.classList.add(serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS);
-      }
-      else {
-        serp.hideSearchResult(searchResult);
+        searchResult.setAttribute('style', serp.BLOCKED_VISIBLE_STYLE)
+        searchResult.classList.remove(serp.BLOCKED_SEARCH_RESULT_CLASS)
+        searchResult.classList.add(serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS)
+      } else {
+        serp.hideSearchResult(searchResult)
       }
     }
 
@@ -507,176 +499,173 @@ blocklist.serp.hideSearchResults = function() {
         searchResult.classList.contains(serp.BLOCKED_SEARCH_RESULT_CLASS) ||
         searchResult.classList.contains(serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS)
       ) {
-        searchResult.classList.remove(serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS);
-        searchResult.classList.remove(serp.BLOCKED_SEARCH_RESULT_CLASS);
-        searchResult.setAttribute('style', 'background-color:inherit;');
+        searchResult.classList.remove(serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS)
+        searchResult.classList.remove(serp.BLOCKED_SEARCH_RESULT_CLASS)
+        searchResult.setAttribute('style', 'background-color:inherit;')
       }
     }
   })
-};
+}
 
 /**
  * Iterates through search results, adding links and applying blocklist filter.
  * @private
  */
-blocklist.serp.modifySearchResults_ = async function() {
-  var { serp } = blocklist;
+blocklist.serp.modifySearchResults_ = async function () {
+  var { serp } = blocklist
 
   // Skip if personalized web search was explicitly disabled (&pws=0).
-  if (serp.IsPwsDisabled_()) return;
+  if (serp.IsPwsDisabled_()) return
 
   // Apply blocklist filter.
   if (serp.blocklist.length > 0 || serp.needsRefresh) {
-    serp.hideSearchResults();
+    serp.hideSearchResults()
   }
   // XXX
-  var searchResultList = [...serp.getSearchResultNodes_(serp.SEARCH_RESULT_CLASS)].filter( sr => blocklist.serp.parseDomainFromSearchResult_(sr));
-  var processedSearchResultList = serp.getSearchResultNodes_(serp.PERSONAL_BLOCKLIST_CLASS);
+  var searchResultList = [...serp.getSearchResultNodes_(serp.SEARCH_RESULT_CLASS)].filter(sr => blocklist.serp.parseDomainFromSearchResult_(sr))
+  var processedSearchResultList = serp.getSearchResultNodes_(serp.PERSONAL_BLOCKLIST_CLASS)
 
   // Add blocklist links to search results until all have been processed.
   if (serp.needsRefresh || processedSearchResultList.length < searchResultList.length) {
-    serp.needsRefresh = false;
+    serp.needsRefresh = false
 
-    blocklist.serp.isDEV && console.log('searchResultList', searchResultList);
+    blocklist.serp.isDEV && console.log('searchResultList', searchResultList)
 
-    await Promise.all(Array.from(searchResultList, block => serp.alterSearchResultNode_(block)));
+    await Promise.all(Array.from(searchResultList, block => serp.alterSearchResultNode_(block)))
 
     // Add/hide/show notification for removed results.
-    var notificationDiv = document.querySelector(`div#${serp.NOTIFICATION_DIV_ID}`);
-    var blockedResults = serp.getSearchResultNodes_(serp.BLOCKED_SEARCH_RESULT_CLASS);
+    var notificationDiv = document.querySelector(`div#${serp.NOTIFICATION_DIV_ID}`)
+    var blockedResults = serp.getSearchResultNodes_(serp.BLOCKED_SEARCH_RESULT_CLASS)
 
     if (blockedResults.length > 0) {
       if (!notificationDiv) {
-        serp.addBlockListNotification_();
+        serp.addBlockListNotification_()
+      } else {
+        notificationDiv.setAttribute('style', serp.NOTIFICATION_STYLE)
       }
-      else {
-        notificationDiv.setAttribute('style', serp.NOTIFICATION_STYLE);
-      }
-    }
-    else if (notificationDiv != null) {
-      notificationDiv.setAttribute('style', 'display:none;');
+    } else if (notificationDiv != null) {
+      notificationDiv.setAttribute('style', 'display:none;')
     }
   }
-};
+}
 
 /**
  * Starts an infinite loop that applies the blocklist features to the page.
  * @private
  */
-blocklist.serp.applyBlocklistFeatures_ = function() {
-  window.setInterval(async function() {
-    await blocklist.serp.modifySearchResults_();
-    document.querySelectorAll('.blockLink + .blockLink').forEach( $dupLink => $dupLink.remove())
-  }, blocklist.serp.REPEAT_INTERVAL_IN_MS);
-};
+blocklist.serp.applyBlocklistFeatures_ = function () {
+  window.setInterval(async function () {
+    await blocklist.serp.modifySearchResults_()
+    document.querySelectorAll('.blockLink + .blockLink').forEach($dupLink => $dupLink.remove())
+  }, blocklist.serp.REPEAT_INTERVAL_IN_MS)
+}
 
 /**
  * Callback that handles the response of the local storage request.
  * @param {Array} response Response from the background page listener.
  */
-blocklist.serp.handleAddToBlocklistResponse = function(response) {
+blocklist.serp.handleAddToBlocklistResponse = function (response) {
   if (response.success) {
-    blocklist.serp.refreshBlocklist();
-    blocklist.serp.needsRefresh = true;
+    blocklist.serp.refreshBlocklist()
+    blocklist.serp.needsRefresh = true
   }
-};
+}
 
 /**
  * Callback that handles the response of the local storage request.
  * @param {Array} response Response from the background page listener.
  */
-blocklist.serp.handleDeleteFromBlocklistResponse = function(response) {
+blocklist.serp.handleDeleteFromBlocklistResponse = function (response) {
   if (response.success) {
     // Reset blocked results and refresh.
-    var searchResultList = blocklist.serp.getSearchResultNodes_(blocklist.serp.SEARCH_RESULT_CLASS);
+    var searchResultList = blocklist.serp.getSearchResultNodes_(blocklist.serp.SEARCH_RESULT_CLASS)
 
-    searchResultList.forEach( srl => {
-      var pattern = blocklist.serp.parseDomainFromSearchResult_(srl);
-      var subdomains = blocklist.serp.extractSubDomains_(pattern);
+    searchResultList.forEach(srl => {
+      var pattern = blocklist.serp.parseDomainFromSearchResult_(srl)
+      var subdomains = blocklist.serp.extractSubDomains_(pattern)
       if (srl.classList.contains(blocklist.serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS) && subdomains.indexOf(response.pattern) != -1) {
         srl.classList.remove(blocklist.serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS)
-        srl.classList.remove(blocklist.serp.BLOCKED_SEARCH_RESULT_CLASS);
+        srl.classList.remove(blocklist.serp.BLOCKED_SEARCH_RESULT_CLASS)
         // Clear the search result's background.
-        srl.setAttribute('style', 'background-color:inherit;');
+        srl.setAttribute('style', 'background-color:inherit;')
       }
-    });
-    blocklist.serp.refreshBlocklist();
-    blocklist.serp.needsRefresh = true;
+    })
+    blocklist.serp.refreshBlocklist()
+    blocklist.serp.needsRefresh = true
   }
-};
+}
 
 /**
  * Callback that handles the response of the local storage request.
  * @param {Array} response Response from the background page listener.
  */
-blocklist.serp.handleGetBlocklistResponse = function(response) {
+blocklist.serp.handleGetBlocklistResponse = function (response) {
   if (response && response.blocklist != undefined) {
-    blocklist.serp.blocklist = response.blocklist;
+    blocklist.serp.blocklist = response.blocklist
   }
-};
+}
 
 /**
  * Retrieves blocklisted domains from localstorage.
  */
-blocklist.serp.refreshBlocklist = function() {
+blocklist.serp.refreshBlocklist = function () {
   browser.runtime.sendMessage({
     type: blocklist.common.GETBLOCKLIST
   })
-  .then(blocklist.serp.handleGetBlocklistResponse);
-};
+    .then(blocklist.serp.handleGetBlocklistResponse)
+}
 
 /**
  * Get if the current page is using https protocol.
  * @private
  */
-blocklist.serp.getIsHttpsPage_ = function() {
-  blocklist.serp.isHttps = (document.URL.indexOf('https://') == 0);
-};
+blocklist.serp.getIsHttpsPage_ = function () {
+  blocklist.serp.isHttps = (document.URL.indexOf('https://') == 0)
+}
 
 /**
  * Check if personalized web search is disabled (pws parameter is 0).
  * @return {boolean} True if url indicates personalized web search was disabled.
  * @private
  */
-blocklist.serp.IsPwsDisabled_ = function() {
-  return document.URL.match(blocklist.serp.PWS_REGEX) !== null;
-};
+blocklist.serp.IsPwsDisabled_ = function () {
+  return document.URL.match(blocklist.serp.PWS_REGEX) !== null
+}
 
 /**
  * Get event id of this search result page.
  * @private
  */
-blocklist.serp.getEventId_ = function() {
-  blocklist.serp.eventId = 'null';
+blocklist.serp.getEventId_ = function () {
+  blocklist.serp.eventId = 'null'
   try {
-    var head = document.getElementsByTagName('head')[0];
-    var scripts = head.getElementsByTagName('script');
+    var head = document.getElementsByTagName('head')[0]
+    var scripts = head.getElementsByTagName('script')
 
-    scripts.forEach( script => {
-      var match = script.text.match(blocklist.serp.EVENT_ID_REGEX);
+    scripts.forEach(script => {
+      var match = script.text.match(blocklist.serp.EVENT_ID_REGEX)
       if (match) {
-        blocklist.serp.eventId = match[1];
+        blocklist.serp.eventId = match[1]
       }
-    });
+    })
   } catch (e) {
   }
-};
+}
 
 /**
  * Exposes a listener, so that it can accept refresh request from manager.
  */
-blocklist.serp.startBackgroundListeners = function() {
-  browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+blocklist.serp.startBackgroundListeners = function () {
+  browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.type == blocklist.serp.REFRESH_REQUEST) {
-      blocklist.serp.refreshBlocklist();
-      blocklist.serp.needsRefresh = true;
+      blocklist.serp.refreshBlocklist()
+      blocklist.serp.needsRefresh = true
     }
-  });
-};
+  })
+}
 
-blocklist.serp.getIsHttpsPage_();
-blocklist.serp.getEventId_();
-blocklist.serp.refreshBlocklist();
-blocklist.serp.applyBlocklistFeatures_();
-blocklist.serp.startBackgroundListeners();
-
+blocklist.serp.getIsHttpsPage_()
+blocklist.serp.getEventId_()
+blocklist.serp.refreshBlocklist()
+blocklist.serp.applyBlocklistFeatures_()
+blocklist.serp.startBackgroundListeners()
