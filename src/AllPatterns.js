@@ -10,6 +10,7 @@ const domainMessage = chrome.i18n.getMessage('domain')
 const unblockMessage = chrome.i18n.getMessage('unblock')
 const okMessage = chrome.i18n.getMessage('ok')
 const editMessage = chrome.i18n.getMessage('edit')
+const nositesMessage = chrome.i18n.getMessage('nosites')
 
 const AllPatterns = () => {
   const [isEditing, setIsEditing] = useState(-1)
@@ -37,6 +38,12 @@ const AllPatterns = () => {
 
   if (!data.blocklist) {
     return <></>
+  }
+
+  if (data.blocklist) {
+    return (
+      <p dangerouslySetInnerHTML={{ __html: nositesMessage }} />
+    )
   }
 
   return (
@@ -83,18 +90,22 @@ const AllPatterns = () => {
             })
           }
         </div>
-        <ReactPaginate
-          previousLabel='<'
-          nextLabel='>'
-          breakLabel='...'
-          pageCount={Math.floor(data.total / data.num)}
-          marginPagesDisplayed={2}
-          pageRangeDisplayed={5}
-          onPageChange={({ selected }) => setCurrentPage(selected)}
-          containerClassName='tfoot pagination'
-          subContainerClassName='pages pagination'
-          activeClassName='active'
-        />
+        {
+          (data.total <= data.num) ? null : (
+            <ReactPaginate
+              previousLabel='<'
+              nextLabel='>'
+              breakLabel='...'
+              pageCount={Math.floor(data.total / data.num)}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={({ selected }) => setCurrentPage(selected)}
+              containerClassName='tfoot pagination'
+              subContainerClassName='pages pagination'
+              activeClassName='active'
+            />
+          )
+        }
       </div>
     </>
   )
