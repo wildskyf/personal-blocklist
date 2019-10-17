@@ -27,14 +27,20 @@
 }
 
 .tbody {
-  max-height: calc(100vh - 140px - 3.5em);
+  max-height: calc(100vh - 160px - 3.5em);
   overflow: auto;
-  border: 1px solid #ccc;
 }
 
 .tfoot {
   box-sizing: border-box;
   height: 40px;
+  margin: 0;
+  border: 1px solid #ccc;
+  width: 100%;
+
+  .disabled {
+    opacity: 0;
+  }
 }
 
 .url {

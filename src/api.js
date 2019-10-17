@@ -3,18 +3,20 @@
 
 import { useState, useEffect } from 'react'
 
-export const useListData = () => {
+const perPageCount = 20
+
+export const useListData = currentPage => {
   const [data, setData] = useState({})
 
   useEffect(() => {
     browser.runtime.sendMessage({
       type: blocklist.common.GETBLOCKLIST,
-      start: 0,
-      num: 20
+      start: currentPage * perPageCount,
+      num: perPageCount
     }).then(data => {
       setData(data)
     })
-  }, [browser])
+  }, [currentPage])
 
   return data
 }

@@ -1,12 +1,14 @@
 /* eslint-env browser, webextensions */
 
 import React, { useState } from 'react'
+import ReactPaginate from 'react-paginate'
 import { useListData, editPattern, deletePattern } from './api'
 import './AllPatterns.scss'
 
 const AllPatterns = () => {
-  const data = useListData()
   const [isEditing, setIsEditing] = useState(-1)
+  const [currentPage, setCurrentPage] = useState(0)
+  const data = useListData(currentPage)
   const inputRef = React.createRef()
 
   const allowPattern = async pattern => {
@@ -75,7 +77,18 @@ const AllPatterns = () => {
             })
           }
         </div>
-        <div className='tfoot' />
+        <ReactPaginate
+          previousLabel='<'
+          nextLabel='>'
+          breakLabel='...'
+          pageCount={Math.floor(data.total / data.num)}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={({ selected }) => setCurrentPage(selected)}
+          containerClassName='tfoot pagination'
+          subContainerClassName='pages pagination'
+          activeClassName='active'
+        />
       </div>
     </>
   )
