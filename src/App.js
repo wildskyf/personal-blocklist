@@ -17,7 +17,7 @@ function App () {
               return <AllPatterns />
             }
             case 'import': {
-              return <ImportPage />
+              return <ImportPage goHome={() => setCurrentPage('all-patterns')} />
             }
             case 'export': {
               return <ExportPage />

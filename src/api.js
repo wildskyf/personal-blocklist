@@ -24,6 +24,11 @@ export const addPattern = pattern => browser.runtime.sendMessage({
   pattern: pattern
 })
 
+export const batchAddPattern = patterns => browser.runtime.sendMessage({
+  type: blocklist.common.ADDBULKTOBLOCKLIST,
+  patterns: patterns
+})
+
 export const deletePattern = pattern => browser.runtime.sendMessage({
   type: blocklist.common.DELETEFROMBLOCKLIST,
   pattern: pattern

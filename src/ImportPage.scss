@@ -1,0 +1,26 @@
+.root {
+  text-align: center;
+
+  textarea {
+    display: block;
+    margin: 20px auto;
+    padding: 5px;
+    box-sizing: border-box;
+    width: 450px;
+    line-height: 1.25em;
+  }
+
+  button {
+    padding: 5px 15px;
+    background: #eee;
+    outline: none;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    margin: 0 9px;
+    cursor: pointer;
+
+    &:hover {
+      background: #ccc;
+    }
+  }
+}
