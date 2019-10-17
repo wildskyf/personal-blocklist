@@ -33,45 +33,50 @@ const AllPatterns = () => {
 
   return (
     <>
-      <table>
-        <tr>
-          <th>操作</th>
-          <th className='url'>
-            <div>網站</div>
-          </th>
-        </tr>
-        {
-          data.blocklist.map((pattern, index) => {
-            const isPatternEditing = isEditing === index
+      <div className='table'>
+        <div className='thead'>
+          <div className='tr'>
+            <div className='th'>操作</div>
+            <div className='th url'>
+              <div>網站</div>
+            </div>
+          </div>
+        </div>
+        <div className='tbody'>
+          {
+            data.blocklist.map((pattern, index) => {
+              const isPatternEditing = isEditing === index
 
-            return (
-              <tr key={`tr-${index}`}>
-                <td className='actions'>
-                  <div onClick={() => allowPattern(pattern)}>允許</div>
-                  {
-                    isPatternEditing ? (
-                      <div onClick={() => saveEditedPattern(pattern)}>儲存</div>
-                    ) : (
-                      <div onClick={() => setIsEditing(index)}>編輯</div>
-                    )
-                  }
-                </td>
-                <td className='url'>
-                  {
-                    isPatternEditing ? (
-                      <input
-                        type='text'
-                        defaultValue={pattern}
-                        ref={inputRef}
-                      />
-                    ) : <div>{pattern}</div>
-                  }
-                </td>
-              </tr>
-            )
-          })
-        }
-      </table>
+              return (
+                <div className='tr' key={`tr-${index}`}>
+                  <div className='td actions'>
+                    <div onClick={() => allowPattern(pattern)}>允許</div>
+                    {
+                      isPatternEditing ? (
+                        <div onClick={() => saveEditedPattern(pattern)}>儲存</div>
+                      ) : (
+                        <div onClick={() => setIsEditing(index)}>編輯</div>
+                      )
+                    }
+                  </div>
+                  <div className='td url'>
+                    {
+                      isPatternEditing ? (
+                        <input
+                          type='text'
+                          defaultValue={pattern}
+                          ref={inputRef}
+                        />
+                      ) : <div>{pattern}</div>
+                    }
+                  </div>
+                </div>
+              )
+            })
+          }
+        </div>
+        <div className='tfoot' />
+      </div>
     </>
   )
 }
