@@ -5,7 +5,9 @@ import { useListData } from './api'
 import './ExportPage.scss'
 
 const ExportPage = props => {
-  const data = useListData()
+  const data = useListData({
+    isGetAll: true
+  })
 
   if (!data.blocklist) {
     return <></>

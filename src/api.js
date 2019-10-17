@@ -5,18 +5,22 @@ import { useState, useEffect } from 'react'
 
 const perPageCount = 20
 
-export const useListData = currentPage => {
+export const useListData = ({ currentPage, isGetAll }) => {
   const [data, setData] = useState({})
 
   useEffect(() => {
-    browser.runtime.sendMessage({
-      type: blocklist.common.GETBLOCKLIST,
+    const requestData = isGetAll ? {} : {
       start: currentPage * perPageCount,
       num: perPageCount
+    }
+
+    browser.runtime.sendMessage({
+      type: blocklist.common.GETBLOCKLIST,
+      ...requestData
     }).then(data => {
       setData(data)
     })
-  }, [currentPage])
+  }, [currentPage, isGetAll])
 
   return data
 }

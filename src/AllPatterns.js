@@ -8,7 +8,7 @@ import './AllPatterns.scss'
 const AllPatterns = () => {
   const [isEditing, setIsEditing] = useState(-1)
   const [currentPage, setCurrentPage] = useState(0)
-  const data = useListData(currentPage)
+  const data = useListData({ currentPage })
   const inputRef = React.createRef()
 
   const allowPattern = async pattern => {
