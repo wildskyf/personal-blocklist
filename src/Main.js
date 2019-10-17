@@ -1,20 +1,31 @@
-/* eslint-env webextensions */
-/* global blocklist */
-import React, { useState, useEffect } from 'react'
+/* eslint-env browser, webextensions */
+
+import React, { useState } from 'react'
+import { useListData, editPattern, deletePattern } from './api'
 import './Main.scss'
 
 const Main = () => {
-  const [data, setData] = useState({})
+  const data = useListData()
+  const [isEditing, setIsEditing] = useState(-1)
+  const inputRef = React.createRef()
 
-  useEffect(() => {
-    browser.runtime.sendMessage({
-      type: blocklist.common.GETBLOCKLIST,
-      start: 0,
-      num: 20
-    }).then(data => {
-      setData(data)
-    })
-  }, [])
+  const allowPattern = async pattern => {
+    const res = await deletePattern(pattern)
+
+    if (res.success) {
+      window.location.reload()
+    }
+  }
+
+  const saveEditedPattern = async oldPattern => {
+    if (!inputRef.current.value || oldPattern === inputRef.current.value) {
+      return setIsEditing(-1)
+    }
+
+    await editPattern(oldPattern, inputRef.current.value)
+    setIsEditing(-1)
+    window.location.reload()
+  }
 
   if (!data.blocklist) {
     return <></>
@@ -25,17 +36,37 @@ const Main = () => {
       <table>
         <tr>
           <th>操作</th>
-          <th className='url'>網站</th>
+          <th className='url'>
+            <div>網站</div>
+          </th>
         </tr>
         {
-          data.blocklist.map(url => {
+          data.blocklist.map((pattern, index) => {
+            const isPatternEditing = isEditing === index
+
             return (
-              <tr>
-                <td>
-                  <div>允許</div>
-                  <div>編輯</div>
+              <tr key={`tr-${index}`}>
+                <td className='actions'>
+                  <div onClick={() => allowPattern(pattern)}>允許</div>
+                  {
+                    isPatternEditing ? (
+                      <div onClick={() => saveEditedPattern(pattern)}>儲存</div>
+                    ) : (
+                      <div onClick={() => setIsEditing(index)}>編輯</div>
+                    )
+                  }
                 </td>
-                <td className='url'>{url}</td>
+                <td className='url'>
+                  {
+                    isPatternEditing ? (
+                      <input
+                        type='text'
+                        defaultValue={pattern}
+                        ref={inputRef}
+                      />
+                    ) : <div>{pattern}</div>
+                  }
+                </td>
               </tr>
             )
           })
