@@ -7,6 +7,8 @@ import './App.css'
 
 function App () {
   const [currentPage, setCurrentPage] = useState('all-patterns')
+  const goHome = () => setCurrentPage('all-patterns')
+
   return (
     <div className='App'>
       <Header currentPage={currentPage} setCurrentPage={setCurrentPage} />
@@ -17,10 +19,10 @@ function App () {
               return <AllPatterns />
             }
             case 'import': {
-              return <ImportPage goHome={() => setCurrentPage('all-patterns')} />
+              return <ImportPage goHome={goHome} />
             }
             case 'export': {
-              return <ExportPage />
+              return <ExportPage goHome={goHome} />
             }
           }
           return <></>
