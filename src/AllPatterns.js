@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react'
 import { useListData, editPattern, deletePattern } from './api'
-import './Main.scss'
+import './AllPatterns.scss'
 
-const Main = () => {
+const AllPatterns = () => {
   const data = useListData()
   const [isEditing, setIsEditing] = useState(-1)
   const inputRef = React.createRef()
@@ -76,4 +76,4 @@ const Main = () => {
   )
 }
 
-export default Main
+export default AllPatterns

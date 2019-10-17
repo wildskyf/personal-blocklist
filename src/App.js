@@ -1,13 +1,31 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Header from './Header'
-import Main from './Main'
+import AllPatterns from './AllPatterns'
+import ImportPage from './ImportPage'
+import ExportPage from './ExportPage'
 import './App.css'
 
 function App () {
+  const [currentPage, setCurrentPage] = useState('all-patterns')
   return (
     <div className='App'>
-      <Header />
-      <Main />
+      <Header currentPage={currentPage} setCurrentPage={setCurrentPage} />
+      {
+        (() => {
+          switch (currentPage) {
+            case 'all-patterns': {
+              return <AllPatterns />
+            }
+            case 'import': {
+              return <ImportPage />
+            }
+            case 'export': {
+              return <ExportPage />
+            }
+          }
+          return <></>
+        })()
+      }
     </div>
   )
 }

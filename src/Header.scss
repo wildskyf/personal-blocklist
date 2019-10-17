@@ -1,6 +1,20 @@
-.header {
-  text-align: center;
-  font-size: 1rem;
-  font-weight: 500;
-  margin: 10px auto 20px;
+ul {
+  width: 80%;
+  padding: .5em 0;
+  border: 1px solid #eee;
+  margin: 20px auto 40px;
+
+  li {
+    display: inline-block;
+    margin: 0 10px;
+    opacity: .6;
+
+    &.active {
+      opacity: 1;
+    }
+
+    &:not(.active) {
+      cursor: pointer;
+    }
+  }
 }
