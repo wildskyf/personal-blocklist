@@ -40,7 +40,7 @@ const AllPatterns = () => {
     return <></>
   }
 
-  if (data.blocklist) {
+  if (data.blocklist.length === 0) {
     return (
       <p dangerouslySetInnerHTML={{ __html: nositesMessage }} />
     )
