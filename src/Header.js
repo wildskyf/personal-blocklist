@@ -2,20 +2,18 @@
 import React from 'react'
 import './Header.scss'
 
-const popUpTitle = chrome.i18n.getMessage('popupTitle')
-
 const pages = [
   {
     id: 'all-patterns',
-    text: popUpTitle
+    text: chrome.i18n.getMessage('popupTitle')
   },
   {
     id: 'import',
-    text: '匯入'
+    text: chrome.i18n.getMessage('import')
   },
   {
     id: 'export',
-    text: '匯出'
+    text: chrome.i18n.getMessage('export')
   }
 ]
 

@@ -4,6 +4,10 @@ import React from 'react'
 import './ImportPage.scss'
 import { batchAddPattern } from './api'
 
+const importInstructions = chrome.i18n.getMessage('importInstructions')
+const importMessage = chrome.i18n.getMessage('import')
+const cancelMessage = chrome.i18n.getMessage('cancel')
+
 const ImportPage = props => {
   const textareaRef = React.createRef()
 
@@ -19,11 +23,11 @@ const ImportPage = props => {
 
   return (
     <div className='root'>
-      <div>請輸入要封鎖的網站列表（一行一個）</div>
+      <div>{importInstructions}</div>
       <textarea rows='10' cols='50' ref={textareaRef} />
 
-      <button onClick={importPatterns}>匯入</button>
-      <button>取消</button>
+      <button onClick={importPatterns}>{importMessage}</button>
+      <button>{cancelMessage}</button>
     </div>
   )
 }

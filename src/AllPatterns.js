@@ -5,6 +5,12 @@ import ReactPaginate from 'react-paginate'
 import { useListData, editPattern, deletePattern } from './api'
 import './AllPatterns.scss'
 
+const operationMessage = chrome.i18n.getMessage('operation')
+const domainMessage = chrome.i18n.getMessage('domain')
+const unblockMessage = chrome.i18n.getMessage('unblock')
+const okMessage = chrome.i18n.getMessage('ok')
+const editMessage = chrome.i18n.getMessage('edit')
+
 const AllPatterns = () => {
   const [isEditing, setIsEditing] = useState(-1)
   const [currentPage, setCurrentPage] = useState(0)
@@ -38,9 +44,9 @@ const AllPatterns = () => {
       <div className='table'>
         <div className='thead'>
           <div className='tr'>
-            <div className='th'>操作</div>
+            <div className='th'>{operationMessage}</div>
             <div className='th url'>
-              <div>網站</div>
+              <div>{domainMessage}</div>
             </div>
           </div>
         </div>
@@ -52,12 +58,12 @@ const AllPatterns = () => {
               return (
                 <div className='tr' key={`tr-${index}`}>
                   <div className='td actions'>
-                    <div onClick={() => allowPattern(pattern)}>允許</div>
+                    <div onClick={() => allowPattern(pattern)}>{unblockMessage}</div>
                     {
                       isPatternEditing ? (
-                        <div onClick={() => saveEditedPattern(pattern)}>儲存</div>
+                        <div onClick={() => saveEditedPattern(pattern)}>{okMessage}</div>
                       ) : (
-                        <div onClick={() => setIsEditing(index)}>編輯</div>
+                        <div onClick={() => setIsEditing(index)}>{editMessage}</div>
                       )
                     }
                   </div>
