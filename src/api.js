@@ -5,6 +5,22 @@ import { useState, useEffect } from 'react'
 
 const perPageCount = 20
 
+export const useCurrnetDomain = () => {
+  const [currentDomain, setCurrentDomain] = useState('')
+
+  useEffect(() => {
+    (async () => {
+      const tabs = await browser.tabs.query({ active: true })
+      const pattern = tabs.map(tab =>
+        tab.url.replace(blocklist.common.HOST_REGEX, '$2')
+      )[0]
+      setCurrentDomain(pattern)
+    })()
+  })
+
+  return currentDomain
+}
+
 export const useListData = ({ currentPage, isGetAll }) => {
   const [data, setData] = useState({})
 
@@ -43,4 +59,9 @@ export const deletePattern = pattern => browser.runtime.sendMessage({
 export const editPattern = async (oldPattern, newPattern) => {
   await deletePattern(oldPattern)
   return addPattern(newPattern)
+}
+
+export const useIsPatternBlock = (pattern) => {
+  const listData = useListData({ currentPage: 0, isGetAll: true })
+  return listData && listData.blocklist && listData.blocklist.includes(pattern)
 }

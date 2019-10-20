@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import ReactPaginate from 'react-paginate'
-import { useListData, editPattern, deletePattern } from './api'
+import { useListData, addPattern, editPattern, deletePattern, useCurrnetDomain, useIsPatternBlock } from './api'
 import './AllPatterns.scss'
 
 const operationMessage = chrome.i18n.getMessage('operation')
@@ -11,6 +11,44 @@ const unblockMessage = chrome.i18n.getMessage('unblock')
 const okMessage = chrome.i18n.getMessage('ok')
 const editMessage = chrome.i18n.getMessage('edit')
 const nositesMessage = chrome.i18n.getMessage('nosites')
+const blockCurrentMessage = chrome.i18n.getMessage('blockCurrent')
+
+const Toolbar = () => {
+  const currentDomain = useCurrnetDomain()
+  const isCurrentBlocked = useIsPatternBlock(currentDomain)
+
+  const blockCurrentDomain = async () => {
+    await addPattern(currentDomain)
+    window.location.reload()
+  }
+
+  const unblockCurrentDomain = async () => {
+    const res = await deletePattern(currentDomain)
+    if (res.success) {
+      window.location.reload()
+    }
+  }
+
+  if (!currentDomain) {
+    return <></>
+  }
+
+  return (
+    <div className='toolbar'>
+      {
+        isCurrentBlocked ? (
+          <div className='block-button' onClick={unblockCurrentDomain}>
+            {unblockMessage}: {currentDomain}
+          </div>
+        ) : (
+          <div className='block-button' onClick={blockCurrentDomain}>
+            {blockCurrentMessage} {currentDomain}
+          </div>
+        )
+      }
+    </div>
+  )
+}
 
 const AllPatterns = () => {
   const [isEditing, setIsEditing] = useState(-1)
@@ -42,12 +80,16 @@ const AllPatterns = () => {
 
   if (data.blocklist.length === 0) {
     return (
-      <p dangerouslySetInnerHTML={{ __html: nositesMessage }} />
+      <>
+        <Toolbar />
+        <p className='no-site-message' dangerouslySetInnerHTML={{ __html: nositesMessage }} />
+      </>
     )
   }
 
   return (
     <>
+      <Toolbar />
       <div className='table'>
         <div className='thead'>
           <div className='tr'>

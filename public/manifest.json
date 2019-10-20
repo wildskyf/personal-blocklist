@@ -2,7 +2,7 @@
   "browser_specific_settings": {
     "gecko": {
       "id": "personal_blocklist@wildsky.cc",
-      "strict_min_version": "57.0"
+      "strict_min_version": "53.0"
     }
   },
 
@@ -20,7 +20,8 @@
   "default_locale": "en",
   "browser_action": {
     "default_icon": "images/icon.png",
-    "default_title": "Personal Blocklist"
+    "default_title": "Personal Blocklist",
+    "default_popup": "index.html"
   },
   "icons": {
     "16": "images/icon-16.jpg",
