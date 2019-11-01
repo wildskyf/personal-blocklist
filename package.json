@@ -12,17 +12,17 @@
   "scripts": {
     "dev": "cd build && web-ext run -u https://www.google.com/search?q=test",
     "ui": "react-scripts start",
-    "watch": "npm-watch",
+    "watch": "cra-build-watch",
+    "watch:public": "npm-watch",
+    "cp-public": "cp -r ./public/* ./build",
     "build:dev": "INLINE_RUNTIME_CHUNK=false react-scripts build",
     "build": "INLINE_RUNTIME_CHUNK=false react-scripts build && cd build && web-ext build -a ~/Desktop",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "watch": {
-    "build:dev": [
-      "package.json",
-      "public/",
-      "src/"
+    "cp-public": [
+      "public/"
     ]
   },
   "eslintConfig": {
@@ -46,6 +46,7 @@
     ]
   },
   "devDependencies": {
+    "cra-build-watch": "^3.0.0",
     "eslint": "^6.5.1",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-import": "^2.18.2",
