@@ -23,9 +23,25 @@
   width: 80%;
   margin: 0 auto 10px;
   text-align: left;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: stretch;
 
   .block-button {
     @extend %button-style;
+  }
+
+  .search-bar {
+    input {
+      display: inline-block;
+      width: auto;
+      padding: 3px 2px;
+      border: 1px solid #aaa;
+      border-radius: 3px;
+      font-size: 16px;
+      margin-left: 5px;
+    }
   }
 }
 

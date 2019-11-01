@@ -21,13 +21,14 @@ export const useCurrnetDomain = () => {
   return currentDomain
 }
 
-export const useListData = ({ currentPage, isGetAll }) => {
+export const useListData = ({ currentPage, isGetAll, search }) => {
   const [data, setData] = useState({})
 
   useEffect(() => {
     const requestData = isGetAll ? {} : {
       start: currentPage * perPageCount,
-      num: perPageCount
+      num: perPageCount,
+      search
     }
 
     browser.runtime.sendMessage({
@@ -36,7 +37,7 @@ export const useListData = ({ currentPage, isGetAll }) => {
     }).then(data => {
       setData(data)
     })
-  }, [currentPage, isGetAll])
+  }, [currentPage, isGetAll, search])
 
   return data
 }

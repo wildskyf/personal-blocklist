@@ -13,7 +13,7 @@ const editMessage = chrome.i18n.getMessage('edit')
 const nositesMessage = chrome.i18n.getMessage('nosites')
 const blockCurrentMessage = chrome.i18n.getMessage('blockCurrent')
 
-const Toolbar = () => {
+const Toolbar = ({ setFilterString }) => {
   const currentDomain = useCurrnetDomain()
   const isCurrentBlocked = useIsPatternBlock(currentDomain)
 
@@ -46,6 +46,13 @@ const Toolbar = () => {
           </div>
         )
       }
+      <div className='search-bar'>
+        <input
+          type='search'
+          placeholder='type to search...'
+          onChange={e => setFilterString(e.target.value)}
+        />
+      </div>
     </div>
   )
 }
@@ -53,7 +60,8 @@ const Toolbar = () => {
 const AllPatterns = () => {
   const [isEditing, setIsEditing] = useState(-1)
   const [currentPage, setCurrentPage] = useState(0)
-  const data = useListData({ currentPage })
+  const [filterString, setFilterString] = useState('')
+  const data = useListData({ currentPage, search: filterString })
   const inputRef = React.createRef()
 
   const allowPattern = async pattern => {
@@ -81,7 +89,7 @@ const AllPatterns = () => {
   if (data.blocklist.length === 0) {
     return (
       <>
-        <Toolbar />
+        <Toolbar setFilterString={setFilterString} />
         <p className='no-site-message' dangerouslySetInnerHTML={{ __html: nositesMessage }} />
       </>
     )
@@ -89,7 +97,7 @@ const AllPatterns = () => {
 
   return (
     <>
-      <Toolbar />
+      <Toolbar setFilterString={setFilterString} />
       <div className='table'>
         <div className='thead'>
           <div className='tr'>

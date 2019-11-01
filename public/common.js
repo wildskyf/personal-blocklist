@@ -30,6 +30,10 @@ var blocklist = {
               var blocklistPatterns = JSON.parse(data.blocklist)
             }
 
+            if (request.search) {
+              blocklistPatterns = blocklistPatterns.filter(pattern => pattern.includes(request.search))
+            }
+
             var resultPatterns = []
             if (request.num != undefined && request.num > 0) {
               resultPatterns = blocklistPatterns.slice(request.start, request.start + request.num)
