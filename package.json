@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "concurrently": "^5.0.0",
     "node-sass": "^4.12.0",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
@@ -10,15 +11,15 @@
     "react-scripts": "3.2.0"
   },
   "scripts": {
-    "dev": "cd build && web-ext run -u https://www.google.com/search?q=test",
-    "ui": "react-scripts start",
-    "watch": "cra-build-watch",
-    "watch:public": "npm-watch",
+    "dev": "concurrently \"npm:dev:watch:src\" \"npm:dev:watch:public\"",
+    "dev:start-env": "cd build && ls && web-ext run -u https://www.google.com/search?q=test",
+    "dev:watch:src": "cra-build-watch",
+    "dev:watch:public": "npm-watch",
     "cp-public": "cp -r ./public/* ./build",
     "build:dev": "INLINE_RUNTIME_CHUNK=false react-scripts build",
-    "build": "INLINE_RUNTIME_CHUNK=false react-scripts build && cd build && web-ext build -a ~/Desktop",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build": "yarn build",
+    "build:production": "INLINE_RUNTIME_CHUNK=false react-scripts build && cd build && web-ext build -a ~/Desktop",
+    "test": "react-scripts test"
   },
   "watch": {
     "cp-public": [
