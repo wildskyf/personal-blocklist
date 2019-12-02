@@ -46,13 +46,17 @@ const Toolbar = ({ setFilterString }) => {
           </div>
         )
       }
-      <div className='search-bar'>
-        <input
-          type='search'
-          placeholder='type to search...'
-          onChange={e => setFilterString(e.target.value)}
-        />
-      </div>
+      {
+        setFilterString ? (
+          <div className='search-bar'>
+            <input
+              type='search'
+              placeholder='type to search...'
+              onChange={e => setFilterString(e.target.value)}
+            />
+          </div>
+        ) : null
+      }
     </div>
   )
 }
@@ -89,7 +93,7 @@ const AllPatterns = () => {
   if (data.blocklist.length === 0) {
     return (
       <>
-        <Toolbar setFilterString={setFilterString} />
+        <Toolbar />
         <p className='no-site-message' dangerouslySetInnerHTML={{ __html: nositesMessage }} />
       </>
     )
