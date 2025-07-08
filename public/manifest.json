@@ -2,12 +2,12 @@
   "browser_specific_settings": {
     "gecko": {
       "id": "personal_blocklist@wildsky.cc",
-      "strict_min_version": "53.0"
+      "strict_min_version": "58.0"
     }
   },
 
   "name": "Personal Blocklist (not by Google)",
-  "version": "3.5.0",
+  "version": "3.5.1",
   "description": "Blocks domains/hosts from appearing in your Google search results.",
   "manifest_version": 2,
   "options_ui": {
