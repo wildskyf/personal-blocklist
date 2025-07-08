@@ -67,3 +67,7 @@ The project consists of two main parts:
 - No TypeScript support
 - Minimal test coverage
 - jQuery is included for compatibility with older code
+
+## Package Management
+
+- Use yarn for dependency management
