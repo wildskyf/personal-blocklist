@@ -22,7 +22,7 @@ blocklist.serp = {
    * Class of the search results on Google SERP.
    * @type {string}
    */
-  SEARCH_RESULT_CLASS: 'g',
+  SEARCH_RESULT_CLASS: 'N54PNb',
 
   /**
    * Class to add to a search result after it was processed by the extension.
@@ -147,7 +147,7 @@ blocklist.serp = {
    */
   REDIRECT_REGEX: new RegExp(
     '^(https?://[a-z.]+[.]?google([.][a-z]{2,4}){1,2})?/' +
-      '[a-z_-]*[?]((img)?u|.*&(img)?u)(rl)?=([^&]*[.][^&]*).*$'),
+    '[a-z_-]*[?]((img)?u|.*&(img)?u)(rl)?=([^&]*[.][^&]*).*$'),
 
   /**
    * A regular expression to check if personalized web search is disabled in url.
@@ -244,7 +244,7 @@ blocklist.serp.createLink_ = async function (handler, pattern, className) {
 blocklist.serp.addLink = function (searchResult, linkDiv) {
   var { serp } = blocklist
   var regularResultSpan = searchResult.querySelector(`div.${serp.SEARCH_RESULT_CITE_DIV_CLASS}`) ||
-                          searchResult.querySelector('cite').parentElement.parentElement
+    searchResult.querySelector('cite').parentElement.parentElement
   var definitionResultSpan = searchResult.querySelector(`span.${serp.DEFINITION_RESULT_LOWER_LINKS_CLASS}`)
   var shortResultDiv = searchResult.querySelector(`div.${serp.SEARCH_RESULT_BODY_CLASS} span.${serp.SEARCH_RESULT_SHORT_LINKS_CLASS}`)
 
@@ -377,8 +377,8 @@ blocklist.serp.alterSearchResultNode_ = async function (searchResult) {
   // Skip if there is already a gws-side block link, this is a book search
   // vertical results, or an internal url that was not resolved.
   if (searchResult.querySelector('.' + blocklist.serp.GWS_BLOCK_LINK_CLASS) !== null ||
-      searchResult.querySelector('td.' + blocklist.serp.BOOK_SEARCH_RESULT_CLASS) !== null ||
-      host[0] == '/') {
+    searchResult.querySelector('td.' + blocklist.serp.BOOK_SEARCH_RESULT_CLASS) !== null ||
+    host[0] == '/') {
     // Mark search result as processed.
     searchResult.classList.add(blocklist.serp.PERSONAL_BLOCKLIST_CLASS)
     return
@@ -483,7 +483,7 @@ blocklist.serp.hideSearchResults = function () {
 
     if (shouldBeBlocked && (
       !searchResult.classList.contains(serp.BLOCKED_SEARCH_RESULT_CLASS) &&
-        !searchResult.classList.contains(serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS)
+      !searchResult.classList.contains(serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS)
     )) {
       if (searchResult.parentNode.classList.contains(serp.SHOWED_GWS_BLOCK_LINK_CLASS)) {
         searchResult.setAttribute('style', serp.BLOCKED_VISIBLE_STYLE)
@@ -521,6 +521,7 @@ blocklist.serp.modifySearchResults_ = async function () {
   if (serp.blocklist.length > 0 || serp.needsRefresh) {
     serp.hideSearchResults()
   }
+
   // XXX
   var searchResultList = [...serp.getSearchResultNodes_(serp.SEARCH_RESULT_CLASS)].filter(sr => blocklist.serp.parseDomainFromSearchResult_(sr))
   var processedSearchResultList = serp.getSearchResultNodes_(serp.PERSONAL_BLOCKLIST_CLASS)
