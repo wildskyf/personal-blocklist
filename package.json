@@ -4,16 +4,16 @@
   "private": true,
   "dependencies": {
     "concurrently": "^5.0.0",
-    "node-sass": "^4.12.0",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-paginate": "^6.3.0",
-    "react-scripts": "3.2.0"
+    "react-scripts": "5.0.1",
+    "sass": "^1.89.2"
   },
   "scripts": {
     "dev": "concurrently \"npm:dev:watch:src\" \"npm:dev:watch:public\"",
     "dev:start-env": "cd build && ls && web-ext run -u https://www.google.com/search?q=test",
-    "dev:watch:src": "cra-build-watch",
+    "dev:watch:src": "nodemon --watch src --ext js,jsx,css,scss --exec 'INLINE_RUNTIME_CHUNK=false react-scripts build'",
     "dev:watch:public": "npm-watch",
     "cp-public": "cp -r ./public/* ./build",
     "build:dev": "INLINE_RUNTIME_CHUNK=false react-scripts build",
@@ -47,7 +47,6 @@
     ]
   },
   "devDependencies": {
-    "cra-build-watch": "^3.0.0",
     "eslint": "^6.5.1",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-import": "^2.18.2",
